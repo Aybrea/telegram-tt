@@ -1,6 +1,6 @@
 import type { FC } from '../../../lib/teact/teact';
 import React, {
-  memo, useEffect, useRef, useState,
+  memo, useEffect, useMemo, useRef, useState,
 } from '../../../lib/teact/teact';
 import { getActions } from '../../../global';
 
@@ -11,6 +11,7 @@ import { LeftColumnContent } from '../../../types';
 import { PRODUCTION_URL } from '../../../config';
 import buildClassName from '../../../util/buildClassName';
 import { IS_ELECTRON, IS_TOUCH_ENV } from '../../../util/windowEnvironment';
+import { LeftMainContext } from '../../../provider/context';
 
 import useForumPanelRender from '../../../hooks/useForumPanelRender';
 import useLastCallback from '../../../hooks/useLastCallback';
@@ -164,87 +165,91 @@ const LeftMain: FC<OwnProps> = ({
 
   const lang = useOldLang();
 
+  const contextValue = useMemo(() => ({ handleSelectContacts }), [handleSelectContacts]);
+
   return (
-    <div
-      id="LeftColumn-main"
-      onMouseEnter={!IS_TOUCH_ENV ? handleMouseEnter : undefined}
-      onMouseLeave={!IS_TOUCH_ENV ? handleMouseLeave : undefined}
-    >
-      <LeftMainHeader
-        shouldHideSearch={isForumPanelVisible}
-        content={content}
-        contactsFilter={contactsFilter}
-        onSearchQuery={onSearchQuery}
-        onSelectSettings={handleSelectSettings}
-        onSelectContacts={handleSelectContacts}
-        onSelectArchived={handleSelectArchived}
-        onReset={onReset}
-        shouldSkipTransition={shouldSkipTransition}
-        isClosingSearch={isClosingSearch}
-      />
-      <Transition
-        name={shouldSkipTransition ? 'none' : 'zoomFade'}
-        renderCount={TRANSITION_RENDER_COUNT}
-        activeKey={content}
-        shouldCleanup
-        cleanupExceptionKey={LeftColumnContent.ChatList}
-        shouldWrap
-        wrapExceptionKey={LeftColumnContent.ChatList}
+    <LeftMainContext.Provider value={contextValue}>
+      <div
+        id="LeftColumn-main"
+        onMouseEnter={!IS_TOUCH_ENV ? handleMouseEnter : undefined}
+        onMouseLeave={!IS_TOUCH_ENV ? handleMouseLeave : undefined}
       >
-        {(isActive) => {
-          switch (content) {
-            case LeftColumnContent.ChatList:
-              return (
-                <ChatFolders
-                  shouldHideFolderTabs={isForumPanelVisible}
-                  onSettingsScreenSelect={onSettingsScreenSelect}
-                  onLeftColumnContentChange={onContentChange}
-                  foldersDispatch={foldersDispatch}
-                  isForumPanelOpen={isForumPanelVisible}
-                />
-              );
-            case LeftColumnContent.GlobalSearch:
-              return (
-                <LeftSearch
-                  searchQuery={searchQuery}
-                  searchDate={searchDate}
-                  isActive={isActive}
-                  onReset={onReset}
-                />
-              );
-            case LeftColumnContent.Contacts:
-              return <ContactList filter={contactsFilter} isActive={isActive} onReset={onReset} />;
-            default:
-              return undefined;
-          }
-        }}
-      </Transition>
-      {shouldRenderUpdateButton && (
-        <Button
-          fluid
-          pill
-          className={buildClassName('btn-update', updateButtonClassNames)}
-          onClick={handleUpdateClick}
-        >
-          {lang('lng_update_telegram')}
-        </Button>
-      )}
-      {shouldRenderForumPanel && (
-        <ForumPanel
-          isOpen={isForumPanelOpen}
-          isHidden={!isForumPanelRendered}
-          onTopicSearch={onTopicSearch}
-          onOpenAnimationStart={handleForumPanelAnimationStart}
-          onCloseAnimationEnd={handleForumPanelAnimationEnd}
+        <LeftMainHeader
+          shouldHideSearch={isForumPanelVisible}
+          content={content}
+          contactsFilter={contactsFilter}
+          onSearchQuery={onSearchQuery}
+          onSelectSettings={handleSelectSettings}
+          onSelectContacts={handleSelectContacts}
+          onSelectArchived={handleSelectArchived}
+          onReset={onReset}
+          shouldSkipTransition={shouldSkipTransition}
+          isClosingSearch={isClosingSearch}
         />
-      )}
-      <NewChatButton
-        isShown={isNewChatButtonShown}
-        onNewPrivateChat={handleSelectContacts}
-        onNewChannel={handleSelectNewChannel}
-        onNewGroup={handleSelectNewGroup}
-      />
-    </div>
+        <Transition
+          name={shouldSkipTransition ? 'none' : 'zoomFade'}
+          renderCount={TRANSITION_RENDER_COUNT}
+          activeKey={content}
+          shouldCleanup
+          cleanupExceptionKey={LeftColumnContent.ChatList}
+          shouldWrap
+          wrapExceptionKey={LeftColumnContent.ChatList}
+        >
+          {(isActive) => {
+            switch (content) {
+              case LeftColumnContent.ChatList:
+                return (
+                  <ChatFolders
+                    shouldHideFolderTabs={isForumPanelVisible}
+                    onSettingsScreenSelect={onSettingsScreenSelect}
+                    onLeftColumnContentChange={onContentChange}
+                    foldersDispatch={foldersDispatch}
+                    isForumPanelOpen={isForumPanelVisible}
+                  />
+                );
+              case LeftColumnContent.GlobalSearch:
+                return (
+                  <LeftSearch
+                    searchQuery={searchQuery}
+                    searchDate={searchDate}
+                    isActive={isActive}
+                    onReset={onReset}
+                  />
+                );
+              case LeftColumnContent.Contacts:
+                return <ContactList filter={contactsFilter} isActive={isActive} onReset={onReset} />;
+              default:
+                return undefined;
+            }
+          }}
+        </Transition>
+        {shouldRenderUpdateButton && (
+          <Button
+            fluid
+            pill
+            className={buildClassName('btn-update', updateButtonClassNames)}
+            onClick={handleUpdateClick}
+          >
+            {lang('lng_update_telegram')}
+          </Button>
+        )}
+        {shouldRenderForumPanel && (
+          <ForumPanel
+            isOpen={isForumPanelOpen}
+            isHidden={!isForumPanelRendered}
+            onTopicSearch={onTopicSearch}
+            onOpenAnimationStart={handleForumPanelAnimationStart}
+            onCloseAnimationEnd={handleForumPanelAnimationEnd}
+          />
+        )}
+        <NewChatButton
+          isShown={isNewChatButtonShown}
+          onNewPrivateChat={handleSelectContacts}
+          onNewChannel={handleSelectNewChannel}
+          onNewGroup={handleSelectNewGroup}
+        />
+      </div>
+    </LeftMainContext.Provider>
   );
 };
 

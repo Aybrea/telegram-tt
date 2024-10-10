@@ -7,7 +7,9 @@ import type { FolderEditDispatch } from '../../../hooks/reducers/useFoldersReduc
 import { SettingsScreens } from '../../../types';
 
 import { selectAnimatedEmoji, selectChatFolder } from '../../../global/selectors';
+import { LeftMainContext } from '../../../provider/context';
 
+import useContext from '../../../hooks/data/useContext';
 import useAppLayout from '../../../hooks/useAppLayout';
 import useOldLang from '../../../hooks/useOldLang';
 
@@ -33,6 +35,7 @@ const ICON_SIZE = 96;
 const EmptyFolder: FC<OwnProps & StateProps> = ({
   chatFolder, animatedEmoji, foldersDispatch, onSettingsScreenSelect,
 }) => {
+  const { handleSelectContacts } = useContext(LeftMainContext);
   const lang = useOldLang();
   const { isMobile } = useAppLayout();
 
@@ -46,10 +49,22 @@ const EmptyFolder: FC<OwnProps & StateProps> = ({
       <div className={styles.sticker}>
         {animatedEmoji && <AnimatedIconFromSticker sticker={animatedEmoji} size={ICON_SIZE} />}
       </div>
-      <h3 className={styles.title} dir="auto">{lang('FilterNoChatsToDisplay')}</h3>
       <p className={styles.description} dir="auto">
         {lang(chatFolder ? 'ChatList.EmptyChatListFilterText' : 'Chat.EmptyChat')}
       </p>
+      <Button
+        ripple={!isMobile}
+        fluid
+        pill
+        onClick={handleSelectContacts}
+        size="tiny"
+        color="translucent"
+        isRtl={lang.isRtl}
+      >
+        <div className={styles.buttonText}>
+          {lang('ChatList.EmptyChatListToStart')}
+        </div>
+      </Button>
       {chatFolder && (
         <Button
           ripple={!isMobile}
