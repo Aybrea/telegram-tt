@@ -26,6 +26,7 @@ import Button from '../ui/Button';
 import Loading from '../ui/Loading';
 
 import blankUrl from '../../assets/blank.png';
+import nlogoIconPath from '../../assets/nlogo.svg';
 
 type StateProps =
   Pick<GlobalState, 'connectionState' | 'authState' | 'authQrCode'>
@@ -153,6 +154,7 @@ const AuthCode: FC<StateProps> = ({
   return (
     <div id="auth-qr-form" className="custom-scroll">
       <div className="auth-form qr">
+        <h1>{lang('Login.QR.Title')}</h1>
         <div className="qr-outer">
           <div
             className={buildClassName('qr-inner', transitionClassNames)}
@@ -164,22 +166,16 @@ const AuthCode: FC<StateProps> = ({
               ref={qrCodeRef}
               style={`width: ${QR_SIZE}px; height: ${QR_SIZE}px`}
             />
-            <AnimatedIcon
-              tgsUrl={LOCAL_TGS_URLS.QrPlane}
-              size={QR_PLANE_SIZE}
-              className="qr-plane"
-              nonInteractive
-              noLoop={false}
+            <img
+              src={nlogoIconPath}
+              draggable={false}
+              alt=""
+              style="width: 54px; height: 54px; position: absolute; top: calc(50% - 27px)"
             />
           </div>
           {!isQrMounted && <div className="qr-loading"><Loading /></div>}
         </div>
-        <h1>{lang('Login.QR.Title')}</h1>
-        <ol>
-          <li><span>{lang('Login.QR.Help1')}</span></li>
-          <li><span>{renderText(lang('Login.QR2.Help2'), ['simple_markdown'])}</span></li>
-          <li><span>{lang('Login.QR.Help3')}</span></li>
-        </ol>
+        <p>{lang('Login.QR.Description')}</p>
         {isAuthReady && (
           <Button isText onClick={habdleReturnToAuthPhoneNumber}>{lang('Login.QR.Cancel')}</Button>
         )}
