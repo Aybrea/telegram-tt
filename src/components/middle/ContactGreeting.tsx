@@ -25,6 +25,8 @@ import StickerView from '../common/StickerView';
 
 import styles from './ContactGreeting.module.scss';
 
+import emptyConversationPath from '../../assets/empty-conversation.svg';
+
 type OwnProps = {
   userId: string;
 };
@@ -99,19 +101,11 @@ const ContactGreeting: FC<OwnProps & StateProps> = ({
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
-        <p className={styles.title} dir="auto">{title}</p>
-        <p className={styles.description} dir="auto">{description}</p>
-
-        <div ref={containerRef} className={styles.sticker} onClick={handleStickerSelect}>
-          {sticker && (
-            <StickerView
-              containerRef={containerRef}
-              sticker={sticker}
-              size={160}
-              shouldLoop
-            />
-          )}
-        </div>
+        <img
+          src={emptyConversationPath}
+          draggable={false}
+          alt=""
+        />
       </div>
       {businessIntro && (
         <div className={styles.explainer}>
