@@ -153,7 +153,7 @@ const MessageList: FC<OwnProps & StateProps> = ({
   isGroupChat,
   isChannelWithAvatars,
   canPost,
-  isSynced,
+  // isSynced,
   isReady,
   isChatWithSelf,
   isRepliesChat,
@@ -229,11 +229,11 @@ const MessageList: FC<OwnProps & StateProps> = ({
     memoFirstUnreadIdRef.current = firstUnreadId;
   }, [firstUnreadId]);
 
-  useEffect(() => {
-    if (areAdsEnabled && isChannelChat && isSynced && isReady) {
-      loadSponsoredMessages({ chatId });
-    }
-  }, [chatId, isSynced, isReady, isChannelChat, areAdsEnabled]);
+  // useEffect(() => {
+  //   if (areAdsEnabled && isChannelChat && isSynced && isReady) {
+  //     loadSponsoredMessages({ chatId });
+  //   }
+  // }, [chatId, isSynced, isReady, isChannelChat, areAdsEnabled]);
 
   // Updated only once when messages are loaded (as we want the unread divider to keep its position)
   useSyncEffect(() => {
