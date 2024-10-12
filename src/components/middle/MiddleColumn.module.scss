@@ -6,7 +6,6 @@
   right: 0;
   z-index: -1;
   overflow: hidden;
-  background-color: var(--theme-background-color);
 
   &::before {
     content: "";
@@ -21,7 +20,8 @@
   }
 
   :global(html.theme-light) &:not(.customBgImage)::before {
-    background-image: url('../../assets/chat-bg-br.png');
+    // background-image: url('../../assets/chat-bg-br.png');
+    background-color: rgb(216, 216, 216);
   }
 
   &:not(.customBgImage).customBgColor::before {
@@ -34,8 +34,6 @@
   }
 
   :global(body:not(.no-page-transitions)) &.withTransition {
-    transition: background-color 0.2s;
-
     &.customBgImage::before {
       transition: background-image var(--layer-transition);
     }
@@ -72,7 +70,8 @@
   }
 
   /* stylelint-disable-next-line @stylistic/max-line-length */
-  :global(html.theme-light body:not(.no-page-transitions)) &:not(.customBgImage).withRightColumn.withTransition::before {
+  :global(html.theme-light body:not(.no-page-transitions))
+    &:not(.customBgImage).withRightColumn.withTransition::before {
     transition: transform var(--layer-transition);
   }
 
@@ -83,14 +82,14 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url('../../assets/chat-bg-pattern-light.png');
+    background-image: url("../../assets/chat-bg-pattern-light.png");
     background-position: top right;
     background-size: 510px auto;
     background-repeat: repeat;
     mix-blend-mode: overlay;
 
     :global(html.theme-dark) & {
-      background-image: url('../../assets/chat-bg-pattern-dark.png');
+      background-image: url("../../assets/chat-bg-pattern-dark.png");
       mix-blend-mode: unset;
     }
   }
