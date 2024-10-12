@@ -11,21 +11,21 @@ import { DEFAULT_LANG_CODE, STRICTERDOM_ENABLED } from '../../config';
 import { disableStrict, enableStrict } from '../../lib/fasterdom/stricterdom';
 import buildClassName from '../../util/buildClassName';
 import { oldSetLanguage } from '../../util/oldLangProvider';
-import { LOCAL_TGS_URLS } from '../common/helpers/animatedAssets';
-import renderText from '../common/helpers/renderText';
-import { getSuggestedLanguage } from './helpers/getSuggestedLanguage';
 
+// import { LOCAL_TGS_URLS } from '../common/helpers/animatedAssets';
+// import renderText from '../common/helpers/renderText';
+// import { getSuggestedLanguage } from './helpers/getSuggestedLanguage';
 import useAsync from '../../hooks/useAsync';
 import useFlag from '../../hooks/useFlag';
 import useMediaTransitionDeprecated from '../../hooks/useMediaTransitionDeprecated';
 import useOldLang from '../../hooks/useOldLang';
-import useOldLangString from '../../hooks/useOldLangString';
 
-import AnimatedIcon from '../common/AnimatedIcon';
+// import useOldLangString from '../../hooks/useOldLangString';
+// import AnimatedIcon from '../common/AnimatedIcon';
 import Button from '../ui/Button';
 import Loading from '../ui/Loading';
 
-import blankUrl from '../../assets/blank.png';
+// import blankUrl from '../../assets/blank.png';
 import nlogoIconPath from '../../assets/nlogo.svg';
 
 type StateProps =
@@ -34,7 +34,7 @@ type StateProps =
 
 const DATA_PREFIX = 'tg://login?token=';
 const QR_SIZE = 280;
-const QR_PLANE_SIZE = 54;
+// const QR_PLANE_SIZE = 54;
 const QR_CODE_MUTATION_DURATION = 50; // The library is asynchronous and we need to wait for its mutation code
 
 let qrCodeStylingPromise: Promise<typeof import('qr-code-styling')>;
@@ -50,21 +50,22 @@ const AuthCode: FC<StateProps> = ({
   connectionState,
   authState,
   authQrCode,
-  language,
+  // language,
 }) => {
   const {
     returnToAuthPhoneNumber,
-    setSettingOption,
+    // setSettingOption,
   } = getActions();
 
-  const suggestedLanguage = getSuggestedLanguage();
+  // const suggestedLanguage = getSuggestedLanguage();
   const lang = useOldLang();
   // eslint-disable-next-line no-null/no-null
   const qrCodeRef = useRef<HTMLDivElement>(null);
 
   const isConnected = connectionState === 'connectionStateReady';
-  const continueText = useOldLangString(isConnected ? suggestedLanguage : undefined, 'ContinueOnThisLanguage', true);
-  const [isLoading, markIsLoading, unmarkIsLoading] = useFlag();
+  // const continueText = useOldLangString(isConnected ? suggestedLanguage : undefined, 'ContinueOnThisLanguage', true);
+  // isLoading,
+  // const [markIsLoading, unmarkIsLoading] = useFlag();
   const [isQrMounted, markQrMounted, unmarkQrMounted] = useFlag();
 
   const { result: qrCode } = useAsync(async () => {
@@ -72,7 +73,7 @@ const AuthCode: FC<StateProps> = ({
     return new QrCodeStyling({
       width: QR_SIZE,
       height: QR_SIZE,
-      image: blankUrl,
+      image: nlogoIconPath,
       margin: 10,
       type: 'svg',
       dotsOptions: {
@@ -80,10 +81,6 @@ const AuthCode: FC<StateProps> = ({
       },
       cornersSquareOptions: {
         type: 'extra-rounded',
-      },
-      imageOptions: {
-        imageSize: 0.4,
-        margin: 8,
       },
       qrOptions: {
         errorCorrectionLevel: 'M',
@@ -135,15 +132,15 @@ const AuthCode: FC<StateProps> = ({
     }
   }, [isConnected]);
 
-  const handleLangChange = useCallback(() => {
-    markIsLoading();
+  // const handleLangChange = useCallback(() => {
+  //   markIsLoading();
 
-    void oldSetLanguage(suggestedLanguage, () => {
-      unmarkIsLoading();
+  //   void oldSetLanguage(suggestedLanguage, () => {
+  //     unmarkIsLoading();
 
-      setSettingOption({ language: suggestedLanguage });
-    });
-  }, [markIsLoading, setSettingOption, suggestedLanguage, unmarkIsLoading]);
+  //     setSettingOption({ language: suggestedLanguage });
+  //   });
+  // }, [markIsLoading, setSettingOption, suggestedLanguage, unmarkIsLoading]);
 
   const habdleReturnToAuthPhoneNumber = useCallback(() => {
     returnToAuthPhoneNumber();
@@ -166,12 +163,6 @@ const AuthCode: FC<StateProps> = ({
               ref={qrCodeRef}
               style={`width: ${QR_SIZE}px; height: ${QR_SIZE}px`}
             />
-            <img
-              src={nlogoIconPath}
-              draggable={false}
-              alt=""
-              style="width: 54px; height: 54px; position: absolute; top: calc(50% - 27px)"
-            />
           </div>
           {!isQrMounted && <div className="qr-loading"><Loading /></div>}
         </div>
@@ -179,9 +170,9 @@ const AuthCode: FC<StateProps> = ({
         {isAuthReady && (
           <Button isText onClick={habdleReturnToAuthPhoneNumber}>{lang('Login.QR.Cancel')}</Button>
         )}
-        {suggestedLanguage && suggestedLanguage !== language && continueText && (
+        {/* {suggestedLanguage && suggestedLanguage !== language && continueText && (
           <Button isText isLoading={isLoading} onClick={handleLangChange}>{continueText}</Button>
-        )}
+        )} */}
       </div>
     </div>
   );
