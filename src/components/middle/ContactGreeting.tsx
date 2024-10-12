@@ -100,13 +100,11 @@ const ContactGreeting: FC<OwnProps & StateProps> = ({
 
   return (
     <div className={styles.root}>
-      <div className={styles.wrapper}>
-        <img
-          src={emptyConversationPath}
-          draggable={false}
-          alt=""
-        />
-      </div>
+      <img
+        src={emptyConversationPath}
+        draggable={false}
+        alt=""
+      />
       {businessIntro && (
         <div className={styles.explainer}>
           {lang('Chat.EmptyStateIntroFooter', getUserFullName(user!))}
