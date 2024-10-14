@@ -43,7 +43,7 @@
   "--color-reply-own-hover-apple": ["#cbefb7", "#8775DA"],
   "--color-reply-own-active": ["#C5ECBE", "#917DEA"],
   "--color-reply-own-active-apple": ["#bae6a8", "#917DEA"],
-  "--color-accent-own": ["#d9d9d9", "#FFFFFF"],
+  "--color-accent-own": ["#9A9A9A", "#FFFFFF"],
   "--color-message-meta-own": ["#4FAE4EFF", "#FFFFFF88"],
   "--color-own-links": ["#3390EC", "#FFFFFF"],
   "--color-code": ["#4a729a", "#8774E1"],
