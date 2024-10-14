@@ -24,6 +24,7 @@ import styles from './ContactList.module.scss';
 import aiRobotPath from '../../../assets/nIcons/ai-robot.svg';
 import friendApplyPath from '../../../assets/nIcons/friend-apply.svg';
 import groupChatPath from '../../../assets/nIcons/group-chat.svg';
+import userBlockPath from '../../../assets/nIcons/user-block.svg';
 
 export type OwnProps = {
   filter: string;
@@ -146,9 +147,14 @@ const ContactList: FC<OwnProps & StateProps> = ({
             </ListItem>
           ))
         ) : viewportIds && !viewportIds.length ? (
-          <p className="no-results" key="no-results" dir="auto">
-            {filter.length ? 'No contacts matched your search.' : '没有联系人'}
-          </p>
+          <div className={styles.emptyUser}>
+            <div>
+              <img src={userBlockPath} alt="" />
+            </div>
+            <p className="no-results" key="no-results" dir="auto">
+              {filter.length ? 'No contacts matched your search.' : '没有联系人'}
+            </p>
+          </div>
         ) : (
           <Loading key="loading" />
         )}

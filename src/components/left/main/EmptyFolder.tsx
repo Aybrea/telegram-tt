@@ -18,6 +18,8 @@ import Button from '../../ui/Button';
 
 import styles from './EmptyFolder.module.scss';
 
+import waitChatPath from '../../../assets/nIcons/wait-chat.svg';
+
 type OwnProps = {
   folderId?: number;
   folderType: 'all' | 'archived' | 'saved' | 'folder';
@@ -47,7 +49,7 @@ const EmptyFolder: FC<OwnProps & StateProps> = ({
   return (
     <div className={styles.root}>
       <div className={styles.sticker}>
-        {animatedEmoji && <AnimatedIconFromSticker sticker={animatedEmoji} size={ICON_SIZE} />}
+        <img src={waitChatPath} alt="" />
       </div>
       <p className={styles.description} dir="auto">
         {lang(chatFolder ? 'ChatList.EmptyChatListFilterText' : 'Chat.EmptyChat')}
@@ -58,7 +60,7 @@ const EmptyFolder: FC<OwnProps & StateProps> = ({
         pill
         onClick={handleSelectContacts}
         size="tiny"
-        color="translucent"
+        color="primary"
         isRtl={lang.isRtl}
       >
         <div className={styles.buttonText}>
