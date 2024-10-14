@@ -3,7 +3,7 @@
 import type { ApiOldLangPack } from '../api/types';
 
 export default {
-  Search: 'Search',
+  Search: '搜索',
   SavedMessages: 'Saved Messages',
   ArchivedChats: 'Archived Chats',
   Contacts: 'Contacts',
@@ -106,7 +106,7 @@ export default {
     otherValue: 'Do you want to unpin all %d messages in this chat?',
   },
   DialogUnpin: 'Unpin',
-  Cancel: 'Cancel',
+  Cancel: '取消',
   AccDescrStickerSet: 'Sticker set',
   Recent: 'Recent',
   DeleteChatUser: 'Delete chat',
@@ -266,7 +266,7 @@ export default {
   NeverShareWithPlaceholder: 'Never share with users...',
   NeverShareWithTitle: 'Never Share',
   'Privacy.ProfilePhoto': 'Profile Photo',
-  FilterNoChatsToDisplay: 'Folder is empty',
+  FilterNoChatsToDisplay: '暂无会话',
   AttachSticker: 'Sticker',
   'ChatList.Search.ShowMore': 'Show more',
   'DialogList.SearchSectionDialogs': 'Chats and Contacts',
@@ -513,4 +513,12 @@ export default {
   FullDateTimeFormat: '%@, %@',
   ProfileOpenAppTerms: 'Terms of Service for Mini Apps',
   ProfileBotOpenAppInfoLink: 'https://telegram.org/tos/mini-apps',
+  lng_info_user_title: '用户信息',
+  'Chat.EmptyChat': '你可以与你的联系人一起聊天',
+  'ChatList.EmptyChatListToStart': '开始聊天',
+  FilterAllChatsShort: 'All',
+  NewFriend: '新的朋友',
+  GroupChat: '群聊',
+  lng_sure_logout: '退出登录',
+  'AccountSettings.Logout': '确认',
 } as ApiOldLangPack;

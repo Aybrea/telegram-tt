@@ -129,7 +129,7 @@ function createLangFn() {
       void importFallbackLangPack();
     }
 
-    const langString = langPack?.[key] || fallbackLangPack?.[key] || fallbackLangPackInitial[key];
+    const langString = fallbackLangPack?.[key] || fallbackLangPackInitial[key];
     if (!langString) {
       return key;
     }
