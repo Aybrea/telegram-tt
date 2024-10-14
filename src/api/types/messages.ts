@@ -570,6 +570,15 @@ export type ApiMessageEntityCustomEmoji = {
 export type ApiMessageEntity = ApiMessageEntityDefault | ApiMessageEntityPre | ApiMessageEntityTextUrl |
 ApiMessageEntityMentionName | ApiMessageEntityCustomEmoji | ApiMessageEntityBlockquote;
 
+export enum MainButtonState {
+  Send = 'send',
+  Record = 'record',
+  Edit = 'edit',
+  Schedule = 'schedule',
+  Forward = 'forward',
+  SendOneTime = 'sendOneTime',
+}
+
 export enum ApiMessageEntityTypes {
   Bold = 'MessageEntityBold',
   Blockquote = 'MessageEntityBlockquote',

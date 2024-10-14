@@ -34,7 +34,7 @@ import type {
 import type {
   IAnchorPosition, InlineBotSettings, ISettings, ThreadId,
 } from '../../types';
-import { MAIN_THREAD_ID } from '../../api/types';
+import { MAIN_THREAD_ID, MainButtonState } from '../../api/types';
 
 import {
   BASE_EMOJI_KEYWORD_LANG,
@@ -264,15 +264,6 @@ type StateProps =
     canPlayEffect?: boolean;
     shouldPlayEffect?: boolean;
   };
-
-enum MainButtonState {
-  Send = 'send',
-  Record = 'record',
-  Edit = 'edit',
-  Schedule = 'schedule',
-  Forward = 'forward',
-  SendOneTime = 'sendOneTime',
-}
 
 type ScheduledMessageArgs = TabState['contentToBeScheduled'] | {
   id: string; queryId: string; isSilent?: boolean;
@@ -1428,7 +1419,7 @@ const Composer: FC<OwnProps & StateProps> = ({
   const areVoiceMessagesNotAllowed = mainButtonState === MainButtonState.Record
     && (!canAttachMedia || !canSendVoiceByPrivacy || !canSendVoices);
 
-  const mainButtonHandler = useLastCallback(() => {
+  const mainButtonHandler = useLastCallback((mainButtonState) => {
     switch (mainButtonState) {
       case MainButtonState.Forward:
         onForward?.();
@@ -1687,7 +1678,7 @@ const Composer: FC<OwnProps & StateProps> = ({
         buildClassName('composer-wrapper', isInStoryViewer && 'with-story-tweaks', isNeedPremium && 'is-need-premium')
       }
       >
-        {!isNeedPremium && (
+        {/* {!isNeedPremium && (
           <svg className="svg-appendix" width="9" height="20">
             <defs>
               <filter
@@ -1711,7 +1702,7 @@ const Composer: FC<OwnProps & StateProps> = ({
               <path d="M6 17H0V0c.193 2.84.876 5.767 2.05 8.782.904 2.325 2.446 4.485 4.625 6.48A1 1 0 016 17z" fill="#FFF" className="corner" />
             </g>
           </svg>
-        )}
+        )} */}
         {isInMessageList && (
           <>
             <InlineBotTooltip
@@ -1786,65 +1777,67 @@ const Composer: FC<OwnProps & StateProps> = ({
               )}
             </>
           )}
-          {((!isComposerBlocked || canSendGifs || canSendStickers) && !isNeedPremium) && (
-            <SymbolMenuButton
+          <div className="emoji-text">
+            {((!isComposerBlocked || canSendGifs || canSendStickers) && !isNeedPremium) && (
+              <SymbolMenuButton
+                chatId={chatId}
+                threadId={threadId}
+                isMobile={isMobile}
+                isReady={isReady}
+                isSymbolMenuOpen={isSymbolMenuOpen}
+                openSymbolMenu={openSymbolMenu}
+                closeSymbolMenu={closeSymbolMenu}
+                canSendStickers={canSendStickers}
+                canSendGifs={canSendGifs}
+                isMessageComposer={isInMessageList}
+                onGifSelect={handleGifSelect}
+                onStickerSelect={handleStickerSelect}
+                onCustomEmojiSelect={handleCustomEmojiSelect}
+                onRemoveSymbol={removeSymbol}
+                onEmojiSelect={insertTextAndUpdateCursor}
+                closeBotCommandMenu={closeBotCommandMenu}
+                closeSendAsMenu={closeSendAsMenu}
+                isSymbolMenuForced={isSymbolMenuForced}
+                canSendPlainText={!isComposerBlocked}
+                inputCssSelector={editableInputCssSelector}
+                idPrefix={type}
+                forceDarkTheme={isInStoryViewer}
+              />
+            )}
+            <MessageInput
+              ref={inputRef}
+              id={inputId}
+              editableInputId={editableInputId}
+              customEmojiPrefix={type}
+              isStoryInput={isInStoryViewer}
               chatId={chatId}
-              threadId={threadId}
-              isMobile={isMobile}
-              isReady={isReady}
-              isSymbolMenuOpen={isSymbolMenuOpen}
-              openSymbolMenu={openSymbolMenu}
-              closeSymbolMenu={closeSymbolMenu}
-              canSendStickers={canSendStickers}
-              canSendGifs={canSendGifs}
-              isMessageComposer={isInMessageList}
-              onGifSelect={handleGifSelect}
-              onStickerSelect={handleStickerSelect}
-              onCustomEmojiSelect={handleCustomEmojiSelect}
-              onRemoveSymbol={removeSymbol}
-              onEmojiSelect={insertTextAndUpdateCursor}
-              closeBotCommandMenu={closeBotCommandMenu}
-              closeSendAsMenu={closeSendAsMenu}
-              isSymbolMenuForced={isSymbolMenuForced}
               canSendPlainText={!isComposerBlocked}
-              inputCssSelector={editableInputCssSelector}
-              idPrefix={type}
-              forceDarkTheme={isInStoryViewer}
+              threadId={threadId}
+              isReady={isReady}
+              isActive={!hasAttachments}
+              getHtml={getHtml}
+              placeholder={
+                activeVoiceRecording && windowWidth <= SCREEN_WIDTH_TO_HIDE_PLACEHOLDER
+                  ? ''
+                  : (!isComposerBlocked
+                    ? (botKeyboardPlaceholder || inputPlaceholder || lang(placeholderForForumAsMessages || 'Message'))
+                    : isInStoryViewer ? lang('StoryRepliesLocked') : lang('Chat.PlaceholderTextNotAllowed'))
+              }
+              timedPlaceholderDate={timedPlaceholderDate}
+              timedPlaceholderLangKey={timedPlaceholderLangKey}
+              forcedPlaceholder={inlineBotHelp}
+              canAutoFocus={isReady && isForCurrentMessageList && !hasAttachments && isInMessageList}
+              noFocusInterception={hasAttachments}
+              shouldSuppressFocus={isMobile && isSymbolMenuOpen}
+              shouldSuppressTextFormatter={isEmojiTooltipOpen || isMentionTooltipOpen || isInlineBotTooltipOpen}
+              onUpdate={setHtml}
+              onSend={onSend}
+              onSuppressedFocus={closeSymbolMenu}
+              onFocus={markInputHasFocus}
+              onBlur={unmarkInputHasFocus}
+              isNeedPremium={isNeedPremium}
             />
-          )}
-          <MessageInput
-            ref={inputRef}
-            id={inputId}
-            editableInputId={editableInputId}
-            customEmojiPrefix={type}
-            isStoryInput={isInStoryViewer}
-            chatId={chatId}
-            canSendPlainText={!isComposerBlocked}
-            threadId={threadId}
-            isReady={isReady}
-            isActive={!hasAttachments}
-            getHtml={getHtml}
-            placeholder={
-              activeVoiceRecording && windowWidth <= SCREEN_WIDTH_TO_HIDE_PLACEHOLDER
-                ? ''
-                : (!isComposerBlocked
-                  ? (botKeyboardPlaceholder || inputPlaceholder || lang(placeholderForForumAsMessages || 'Message'))
-                  : isInStoryViewer ? lang('StoryRepliesLocked') : lang('Chat.PlaceholderTextNotAllowed'))
-            }
-            timedPlaceholderDate={timedPlaceholderDate}
-            timedPlaceholderLangKey={timedPlaceholderLangKey}
-            forcedPlaceholder={inlineBotHelp}
-            canAutoFocus={isReady && isForCurrentMessageList && !hasAttachments && isInMessageList}
-            noFocusInterception={hasAttachments}
-            shouldSuppressFocus={isMobile && isSymbolMenuOpen}
-            shouldSuppressTextFormatter={isEmojiTooltipOpen || isMentionTooltipOpen || isInlineBotTooltipOpen}
-            onUpdate={setHtml}
-            onSend={onSend}
-            onSuppressedFocus={closeSymbolMenu}
-            onFocus={markInputHasFocus}
-            onBlur={unmarkInputHasFocus}
-            isNeedPremium={isNeedPremium}
-          />
+          </div>
           {isInMessageList && (
             <>
               {isInlineBotLoading && Boolean(inlineBotId) && (
@@ -1880,7 +1873,7 @@ const Composer: FC<OwnProps & StateProps> = ({
               {formatVoiceRecordDuration(currentRecordTime - startRecordTimeRef.current!)}
             </span>
           )}
-          {!isNeedPremium && (
+          <div className="attachMenu-container">
             <AttachMenu
               chatId={chatId}
               threadId={threadId}
@@ -1902,8 +1895,10 @@ const Composer: FC<OwnProps & StateProps> = ({
               theme={theme}
               onMenuOpen={onAttachMenuOpen}
               onMenuClose={onAttachMenuClose}
+              onMainHandler={mainButtonHandler}
+              mainButtonState={mainButtonState}
             />
-          )}
+          </div>
           {isInMessageList && Boolean(botKeyboardMessageId) && (
             <BotKeyboardMenu
               messageId={botKeyboardMessageId}
@@ -2001,7 +1996,7 @@ const Composer: FC<OwnProps & StateProps> = ({
           )}
         </Button>
       )}
-      <Button
+      {/* <Button
         ref={mainButtonRef}
         round
         color="secondary"
@@ -2025,7 +2020,7 @@ const Composer: FC<OwnProps & StateProps> = ({
         {onForward && <i className="icon icon-forward" />}
         {isInMessageList && <i className="icon icon-schedule" />}
         {isInMessageList && <i className="icon icon-check" />}
-      </Button>
+      </Button> */}
       {effectEmoji && (
         <span className="effect-icon" onClick={handleRemoveEffect}>
           {renderText(effectEmoji)}

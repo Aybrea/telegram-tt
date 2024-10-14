@@ -4,9 +4,9 @@ import React, {
   useMemo,
 } from '../../../lib/teact/teact';
 
-import type { ApiAttachMenuPeerType, ApiMessage } from '../../../api/types';
 import type { GlobalState } from '../../../global/types';
 import type { ISettings, ThreadId } from '../../../types';
+import { type ApiAttachMenuPeerType, type ApiMessage, MainButtonState } from '../../../api/types';
 
 import {
   CONTENT_TYPES_WITH_PREVIEW, DEBUG_LOG_FILENAME, SUPPORTED_AUDIO_CONTENT_TYPES,
@@ -82,6 +82,8 @@ const AttachMenu: FC<OwnProps> = ({
   onPollCreate,
   hasReplaceableMedia,
   editingMessage,
+  onMainHandler,
+  mainButtonState,
 }) => {
   const [isAttachMenuOpen, openAttachMenu, closeAttachMenu] = useFlag();
   const [handleMouseEnter, handleMouseLeave, markMouseInside] = useMouseInside(isAttachMenuOpen, closeAttachMenu);
@@ -170,7 +172,7 @@ const AttachMenu: FC<OwnProps> = ({
 
   return (
     <div className="AttachMenu">
-      {
+      {/* {
         editingMessage && hasReplaceableMedia ? (
           <ResponsiveHoverButton
             id="replace-menu-button"
@@ -199,64 +201,51 @@ const AttachMenu: FC<OwnProps> = ({
             <Icon name="attach" />
           </ResponsiveHoverButton>
         )
-      }
-      <Menu
-        id="attach-menu-controls"
-        isOpen={isMenuOpen}
-        autoClose
-        positionX="right"
-        positionY="bottom"
-        onClose={closeAttachMenu}
-        className="AttachMenu--menu fluid"
-        onCloseAnimationEnd={closeAttachMenu}
-        onMouseEnter={!IS_TOUCH_ENV ? handleMouseEnter : undefined}
-        onMouseLeave={!IS_TOUCH_ENV ? handleMouseLeave : undefined}
-        noCloseOnBackdrop={!IS_TOUCH_ENV}
-        ariaLabelledBy="attach-menu-button"
-      >
-        {/*
+      } */}
+
+      {/*
        ** Using ternary operator here causes some attributes from first clause
        ** transferring to the fragment content in the second clause
        */}
-        {!canAttachMedia && (
-          <MenuItem className="media-disabled" disabled>Posting media content is not allowed in this group.</MenuItem>
-        )}
-        {canAttachMedia && (
-          <>
-            {canSendVideoOrPhoto && !isFile && (
-              <MenuItem icon="photo" onClick={handleQuickSelect}>
-                {lang(canSendVideoAndPhoto ? 'AttachmentMenu.PhotoOrVideo'
-                  : (canSendPhotos ? 'InputAttach.Popover.Photo' : 'InputAttach.Popover.Video'))}
-              </MenuItem>
-            )}
-            {((canSendDocuments || canSendAudios) && !isPhotoOrVideo)
+      {!canAttachMedia && (
+        <MenuItem className="media-disabled" disabled>Posting media content is not allowed in this group.</MenuItem>
+      )}
+      {canAttachMedia && (
+        <>
+          {canSendVideoOrPhoto && !isFile && (
+            <MenuItem icon="photo" onClick={handleQuickSelect} />
+          )}
+          {((canSendDocuments || canSendAudios) && !isPhotoOrVideo)
               && (
-                <MenuItem icon="document" onClick={handleDocumentSelect}>
-                  {lang(!canSendDocuments && canSendAudios ? 'InputAttach.Popover.Music' : 'AttachDocument')}
-                </MenuItem>
+                <MenuItem icon="document" onClick={handleDocumentSelect} />
               )}
-            {canSendDocuments && shouldCollectDebugLogs && (
-              <MenuItem icon="bug" onClick={handleSendLogs}>
-                {lang('DebugSendLogs')}
-              </MenuItem>
-            )}
-          </>
-        )}
-        {canAttachPolls && !editingMessage && (
-          <MenuItem icon="poll" onClick={onPollCreate}>{lang('Poll')}</MenuItem>
-        )}
+          <MenuItem icon="schedule" onClick={() => { onMainHandler(MainButtonState.Schedule); }} />
+          {mainButtonState === MainButtonState.Record
+            && <MenuItem icon="microphone-alt" onClick={() => { onMainHandler(MainButtonState.Record); }} />}
+          {mainButtonState === MainButtonState.Send
+            && <MenuItem icon="send" onClick={() => { onMainHandler(MainButtonState.Send); }} />}
 
-        {!editingMessage && !hasReplaceableMedia && !isScheduled && bots?.map((bot) => (
-          <AttachBotItem
-            bot={bot}
-            chatId={chatId}
-            threadId={threadId}
-            theme={theme}
-            onMenuOpened={markAttachmentBotMenuOpen}
-            onMenuClosed={unmarkAttachmentBotMenuOpen}
-          />
-        ))}
-      </Menu>
+          {canSendDocuments && shouldCollectDebugLogs && (
+            <MenuItem icon="bug" onClick={handleSendLogs}>
+              {lang('DebugSendLogs')}
+            </MenuItem>
+          )}
+        </>
+      )}
+      {canAttachPolls && !editingMessage && (
+        <MenuItem icon="poll" onClick={onPollCreate}>{lang('Poll')}</MenuItem>
+      )}
+
+      {/* {!editingMessage && !hasReplaceableMedia && !isScheduled && bots?.map((bot) => (
+        <AttachBotItem
+          bot={bot}
+          chatId={chatId}
+          threadId={threadId}
+          theme={theme}
+          onMenuOpened={markAttachmentBotMenuOpen}
+          onMenuClosed={unmarkAttachmentBotMenuOpen}
+        />
+      ))} */}
     </div>
   );
 };
