@@ -62,6 +62,7 @@ const EmptyFolder: FC<OwnProps & StateProps> = ({
         size="tiny"
         color="primary"
         isRtl={lang.isRtl}
+        isText
       >
         <div className={styles.buttonText}>
           {lang('ChatList.EmptyChatListToStart')}

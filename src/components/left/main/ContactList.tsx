@@ -152,7 +152,7 @@ const ContactList: FC<OwnProps & StateProps> = ({
               <img src={userBlockPath} alt="" />
             </div>
             <p className="no-results" key="no-results" dir="auto">
-              {filter.length ? 'No contacts matched your search.' : '没有联系人'}
+              {filter.length ? '没有匹配的联系人' : '没有联系人'}
             </p>
           </div>
         ) : (

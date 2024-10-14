@@ -21,6 +21,7 @@ import Button from '../ui/Button';
 import Checkbox from '../ui/Checkbox';
 import InputText from '../ui/InputText';
 import Modal from '../ui/Modal';
+import SearchInput from '../ui/SearchInput';
 
 import './NewContactModal.scss';
 
@@ -113,6 +114,14 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
     }
   }, [firstName, importContact, isByPhoneNumber, lastName, phone, shouldSharePhoneNumber, updateContact, userId]);
 
+  const onSearchQuery = useCallback((v) => {
+    handlePhoneChange({
+      target: {
+        value: v,
+      },
+    });
+  }, [handlePhoneChange]);
+
   if (!isOpen && !isShown) {
     return undefined;
   }
@@ -172,9 +181,8 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
   function renderCreateContact() {
     return (
       <div className="NewContactModal__new-contact" dir={lang.isRtl ? 'rtl' : undefined}>
-        <Avatar size="jumbo" text={`${firstName} ${lastName}`} />
         <div className="NewContactModal__new-contact-fieldset">
-          <InputText
+          {/* <InputText
             ref={inputRef}
             value={phone}
             inputMode="tel"
@@ -183,17 +191,45 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
             onChange={handlePhoneChange}
           />
           <InputText
+            value={lastName}
+            label={lang('LastName')}
+            tabIndex={0}
+            onChange={handleLastNameChange}
+          /> */}
+          <SearchInput
+            ref={inputRef}
+            inputId="telegram-search-input"
+            resultsItemSelector=".LeftSearch .ListItem-button"
+            // className={buildClassName(
+            //   (globalSearchChatId || searchDate) ? 'with-picker-item' : undefined,
+            //   shouldHideSearch && 'SearchInput--hidden',
+            // )}
+            // value={isClosingSearch ? undefined : (contactsFilter || searchQuery)}
+            value={phone}
+            // focused={isSearchFocused}
+            // isLoading={isLoading || connectionStatusPosition === 'minimized'}
+            // spinnerColor={connectionStatusPosition === 'minimized' ? 'yellow' : undefined}
+            // spinnerBackgroundColor={connectionStatusPosition === 'minimized' && theme === 'light' ? 'light' : undefined}
+            // placeholder={searchInputPlaceholder}
+            // autoComplete="off"
+            // canClose={Boolean(globalSearchChatId || searchDate)}
+            onChange={onSearchQuery}
+            // onReset={onReset}
+            // onFocus={handleSearchFocus}
+            // onSpinnerClick={connectionStatusPosition === 'minimized' ? toggleConnectionStatus : undefined}
+          >
+            {/* {searchContent}
+            <StoryToggler canShow={!isSearchFocused && !selectedSearchDate && !globalSearchChatId} /> */}
+          </SearchInput>
+          <InputText
             value={firstName}
             label={lang('FirstName')}
             tabIndex={0}
             onChange={handleFirstNameChange}
           />
-          <InputText
-            value={lastName}
-            label={lang('LastName')}
-            tabIndex={0}
-            onChange={handleLastNameChange}
-          />
+          <p className="my-chatId">
+            我的Chat ID:41551916
+          </p>
         </div>
       </div>
     );
@@ -207,10 +243,10 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
       onClose={handleClose}
       onCloseAnimationEnd={unmarkIsShown}
     >
-      {renderingUser && renderAddContact()}
+      {/* {renderingUser && renderAddContact()} */}
       {renderingIsByPhoneNumber && renderCreateContact()}
       <div className="dialog-buttons">
-        <Button
+        {/* <Button
           isText
           className="confirm-dialog-button"
           onClick={handleClose}
@@ -224,6 +260,13 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
           onClick={handleSubmit}
         >
           {lang('Done')}
+        </Button> */}
+        <Button
+          size="tiny"
+          disabled={!canBeSubmitted}
+          onClick={handleSubmit}
+        >
+          {lang('Search')}
         </Button>
       </div>
     </Modal>

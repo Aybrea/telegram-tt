@@ -521,4 +521,6 @@ export default {
   GroupChat: '群聊',
   lng_sure_logout: '退出登录',
   'AccountSettings.Logout': '确认',
+  NewContact: '添加好友',
+  'Contacts.PhoneNumber.NotRegistred': '用户不存在',
 } as ApiOldLangPack;
