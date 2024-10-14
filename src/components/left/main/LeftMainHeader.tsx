@@ -197,9 +197,10 @@ const LeftMainHeader: FC<OwnProps & StateProps> = ({
 
   useEffect(() => (isSearchFocused ? captureEscKeyListener(() => onReset()) : undefined), [isSearchFocused, onReset]);
 
-  const searchInputPlaceholder = content === LeftColumnContent.Contacts
-    ? lang('SearchFriends')
-    : lang('Search');
+  // const searchInputPlaceholder = content === LeftColumnContent.Contacts
+  //   ? lang('SearchFriends')
+  //   : lang('Search');
+  const searchInputPlaceholder = '搜索';
 
   const versionString = IS_BETA ? `${APP_VERSION} Beta (${APP_REVISION})` : (DEBUG ? APP_REVISION : APP_VERSION);
 
