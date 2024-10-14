@@ -21,7 +21,7 @@
 
   :global(html.theme-light) &:not(.customBgImage)::before {
     // background-image: url('../../assets/chat-bg-br.png');
-    background-color: rgb(216, 216, 216);
+    background-color: var(--theme-background-color);
   }
 
   &:not(.customBgImage).customBgColor::before {
