@@ -147,7 +147,7 @@ const ContactList: FC<OwnProps & StateProps> = ({
           ))
         ) : viewportIds && !viewportIds.length ? (
           <p className="no-results" key="no-results" dir="auto">
-            {filter.length ? 'No contacts matched your search.' : 'Contact list is empty.'}
+            {filter.length ? 'No contacts matched your search.' : '没有联系人'}
           </p>
         ) : (
           <Loading key="loading" />
