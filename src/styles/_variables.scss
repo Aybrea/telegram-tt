@@ -26,6 +26,8 @@ $color-text-green: #4fae4e;
 $color-green: #00c73e;
 $color-light-green: #eeffde;
 
+$color-blue: #397EE4;
+
 $color-error: #e53935;
 
 $color-warning: #fb8c00;
@@ -109,6 +111,7 @@ $color-message-story-mention-to: #74bcff;
   --color-primary-opacity-hover: rgba(var(--color-primary), 0.25);
   --color-primary-tint: rgba(var(--color-primary), 0.1);
   --color-green: #{$color-green};
+  --color-blue: #{$color-blue};
   --color-green-darker: #{color.mix($color-green, $color-black, 84%)};
   --color-success: #{$color-green};
 
