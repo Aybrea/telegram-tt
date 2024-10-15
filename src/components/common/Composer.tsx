@@ -38,6 +38,7 @@ import { MAIN_THREAD_ID, MainButtonState } from '../../api/types';
 
 import {
   BASE_EMOJI_KEYWORD_LANG,
+  CONTENT_TYPES_WITH_PREVIEW,
   EDITABLE_INPUT_MODAL_ID,
   HEART_REACTION,
   MAX_UPLOAD_FILEPART_SIZE,
@@ -46,6 +47,9 @@ import {
   SCHEDULED_WHEN_ONLINE,
   SEND_MESSAGE_ACTION_INTERVAL,
   SERVICE_NOTIFICATIONS_USER_ID,
+  SUPPORTED_AUDIO_CONTENT_TYPES,
+  SUPPORTED_PHOTO_CONTENT_TYPES,
+  SUPPORTED_VIDEO_CONTENT_TYPES,
 } from '../../config';
 import { requestMeasure, requestNextMutation } from '../../lib/fasterdom/fasterdom';
 import {
@@ -96,11 +100,13 @@ import { processDeepLink } from '../../util/deeplink';
 import { tryParseDeepLink } from '../../util/deepLinkParser';
 import deleteLastCharacterOutsideSelection from '../../util/deleteLastCharacterOutsideSelection';
 import { processMessageInputForCustomEmoji } from '../../util/emoji/customEmojiManager';
+import { validateFiles } from '../../util/files';
 import focusEditableElement from '../../util/focusEditableElement';
 import { MEMO_EMPTY_ARRAY } from '../../util/memo';
 import parseHtmlAsFormattedText from '../../util/parseHtmlAsFormattedText';
 import { insertHtmlInSelection } from '../../util/selection';
 import { getServerTime } from '../../util/serverTime';
+import { openSystemFilesDialog } from '../../util/systemFilesDialog';
 import { IS_IOS, IS_VOICE_RECORDING_SUPPORTED } from '../../util/windowEnvironment';
 import windowSize from '../../util/windowSize';
 import applyIosAutoCapitalizationFix from '../middle/composer/helpers/applyIosAutoCapitalizationFix';
@@ -572,6 +578,9 @@ const Composer: FC<OwnProps & StateProps> = ({
     editedMessage: editingMessage,
   });
 
+  const canSendVideoAndPhoto = canSendPhotos && canSendVideos;
+  const canSendVideoOrPhoto = canSendPhotos || canSendVideos;
+
   const [isBotKeyboardOpen, openBotKeyboard, closeBotKeyboard] = useFlag();
   const [isBotCommandMenuOpen, openBotCommandMenu, closeBotCommandMenu] = useFlag();
   const [isSymbolMenuOpen, openSymbolMenu, closeSymbolMenu] = useFlag();
@@ -853,6 +862,36 @@ const Composer: FC<OwnProps & StateProps> = ({
     if (editingMessage) {
       handleEditCancel();
     }
+  });
+
+  const handleDocumentSelect = useLastCallback(() => {
+    openSystemFilesDialog(!canSendDocuments && canSendAudios
+      ? Array.from(SUPPORTED_AUDIO_CONTENT_TYPES).join(',') : (
+        '*'
+      ), (e) => {
+      const { files } = e.target as HTMLInputElement;
+      const validatedFiles = validateFiles(files);
+      if (validatedFiles?.length) {
+        handleFileSelect(validatedFiles, shouldSuggestCompression);
+      }
+    });
+  });
+
+  const handleQuickSelect = useLastCallback(() => {
+    openSystemFilesDialog(
+      Array.from(canSendVideoAndPhoto ? CONTENT_TYPES_WITH_PREVIEW : (
+        canSendPhotos ? SUPPORTED_PHOTO_CONTENT_TYPES : SUPPORTED_VIDEO_CONTENT_TYPES
+      )).join(','),
+      (e) => {
+        const { files } = e.target as HTMLInputElement;
+        const validatedFiles = validateFiles(files);
+
+        if (validatedFiles?.length) {
+          // onFileSelect(validatedFiles, shouldSuggestCompression);
+          handleFileSelect(validatedFiles, shouldSuggestCompression);
+        }
+      },
+    );
   });
 
   const validateTextLength = useLastCallback((text: string, isAttachmentModal?: boolean) => {
@@ -1419,7 +1458,7 @@ const Composer: FC<OwnProps & StateProps> = ({
   const areVoiceMessagesNotAllowed = mainButtonState === MainButtonState.Record
     && (!canAttachMedia || !canSendVoiceByPrivacy || !canSendVoices);
 
-  const mainButtonHandler = useLastCallback((mainButtonState) => {
+  const mainButtonHandler = useLastCallback(() => {
     switch (mainButtonState) {
       case MainButtonState.Forward:
         onForward?.();
@@ -1874,7 +1913,7 @@ const Composer: FC<OwnProps & StateProps> = ({
             </span>
           )}
           <div className="attachMenu-container">
-            <AttachMenu
+            {/* <AttachMenu
               chatId={chatId}
               threadId={threadId}
               editingMessage={editingMessage}
@@ -1897,7 +1936,93 @@ const Composer: FC<OwnProps & StateProps> = ({
               onMenuClose={onAttachMenuClose}
               onMainHandler={mainButtonHandler}
               mainButtonState={mainButtonState}
-            />
+            /> */}
+
+            {activeVoiceRecording ? (
+              <Button
+                round
+                color="danger"
+                size="tiny"
+                className="cancel"
+                onClick={stopRecordingVoice}
+                ariaLabel="Cancel voice recording"
+              >
+                <i className="icon icon-delete" />
+              </Button>
+            ) : (
+              <>
+                <Button
+                  ref={mainButtonRef}
+                  round
+                  color="translucent"
+                  size="tiny"
+                  disabled={areVoiceMessagesNotAllowed}
+                  allowDisabledClick
+                  noFastClick
+                  ariaLabel={lang(sendButtonAriaLabel)}
+                  onClick={handleDocumentSelect}
+                  onContextMenu={
+                    mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
+                  }
+                >
+                  <i className="icon icon-document" />
+                </Button>
+                <Button
+                  ref={mainButtonRef}
+                  round
+                  color="translucent"
+                  size="tiny"
+                  disabled={areVoiceMessagesNotAllowed}
+                  allowDisabledClick
+                  noFastClick
+                  ariaLabel={lang(sendButtonAriaLabel)}
+                  onClick={handleQuickSelect}
+                  onContextMenu={
+                    mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
+                  }
+                >
+                  <i className="icon icon-photo" />
+                </Button>
+                <Button
+                  ref={mainButtonRef}
+                  round
+                  color="translucent"
+                  size="tiny"
+                  disabled={areVoiceMessagesNotAllowed}
+                  allowDisabledClick
+                  noFastClick
+                  ariaLabel={lang(sendButtonAriaLabel)}
+                  onContextMenu={
+                    mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
+                  }
+                >
+                  <i className="icon icon-schedule" />
+                </Button>
+              </>
+            )}
+            <Button
+              ref={mainButtonRef}
+              round
+              color="translucent"
+              size="tiny"
+              className={buildClassName(
+                mainButtonState,
+                'main-button',
+                !isReady && 'not-ready',
+                activeVoiceRecording && 'recording',
+              )}
+              disabled={areVoiceMessagesNotAllowed}
+              allowDisabledClick
+              noFastClick
+              ariaLabel={lang(sendButtonAriaLabel)}
+              onClick={mainButtonHandler}
+              onContextMenu={
+                mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
+              }
+            >
+              <i className="icon icon-send" />
+              <i className="icon icon-microphone-alt" />
+            </Button>
           </div>
           {isInMessageList && Boolean(botKeyboardMessageId) && (
             <BotKeyboardMenu
@@ -1942,7 +2067,7 @@ const Composer: FC<OwnProps & StateProps> = ({
           />
         </div>
       </div>
-      {canSendOneTimeMedia && activeVoiceRecording && (
+      {/* {canSendOneTimeMedia && activeVoiceRecording && (
         <Button
           className={buildClassName('view-once', isViewOnceEnabled && 'active')}
           round
@@ -1953,18 +2078,7 @@ const Composer: FC<OwnProps & StateProps> = ({
           <Icon name="view-once" />
           <Icon name="one-filled" />
         </Button>
-      )}
-      {activeVoiceRecording && (
-        <Button
-          round
-          color="danger"
-          className="cancel"
-          onClick={stopRecordingVoice}
-          ariaLabel="Cancel voice recording"
-        >
-          <i className="icon icon-delete" />
-        </Button>
-      )}
+      )} */}
       {isInStoryViewer && !activeVoiceRecording && (
         <Button
           round

@@ -344,7 +344,7 @@ const MessageInput: FC<OwnProps & StateProps> = ({
       window.clearTimeout(selectionTimeoutRef.current);
     }
     // Small delay to allow browser properly recalculate selection
-    selectionTimeoutRef.current = window.setTimeout(processSelection, SELECTION_RECALCULATE_DELAY_MS);
+    // selectionTimeoutRef.current = window.setTimeout(processSelection, SELECTION_RECALCULATE_DELAY_MS);
   }
 
   function handleMouseDown(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {

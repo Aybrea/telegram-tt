@@ -71,179 +71,6 @@
     }
   }
 
-  > .Button {
-    flex-shrink: 0;
-    margin-left: 0.5rem;
-    width: var(--base-height);
-    height: var(--base-height);
-
-    &:not(.danger) {
-      color: var(--color-composer-button);
-    }
-
-    @media (max-width: 600px) {
-      width: 2.875rem;
-      height: 2.875rem;
-    }
-
-    .icon-send,
-    .icon-schedule,
-    .icon-forward,
-    .icon-microphone-alt,
-    .icon-check,
-    .icon-view-once,
-    .icon-one-filled {
-      position: absolute;
-    }
-
-    @media (hover: hover) {
-      &:not(:active):not(:focus):not(:hover) {
-        .icon-send,
-        .icon-schedule,
-        .icon-forward,
-        .icon-check {
-          color: var(--color-primary);
-        }
-      }
-    }
-
-    @media (hover: none) {
-      &:not(:active):not(:focus) {
-        .icon-send,
-        .icon-schedule,
-        .icon-forward,
-        .icon-check {
-          color: var(--color-primary);
-        }
-      }
-    }
-
-    &.cancel {
-      position: relative;
-      z-index: 1;
-
-      &:hover,
-      &.active {
-        background: var(--color-chat-hover);
-      }
-    }
-
-    &.recording {
-      position: relative;
-      z-index: 0;
-      transition: box-shadow 0.1s;
-    }
-
-    &.story-reaction-button {
-      --custom-emoji-size: 1.5rem;
-
-      overflow: visible !important;
-
-      &:hover {
-        background-color: var(--color-background) !important;
-      }
-
-      .icon-heart {
-        transition: color 0.2s ease-out;
-      }
-
-      .story-reaction-heart {
-        color: var(--color-heart) !important;
-      }
-    }
-
-    &.send,
-    &.sendOneTime {
-      .icon-send {
-        animation: grow-icon 0.4s ease-out;
-      }
-
-      .icon-microphone-alt,
-      .icon-forward,
-      .icon-check,
-      .icon-schedule {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-    }
-
-    &.schedule {
-      .icon-schedule {
-        animation: grow-icon 0.4s ease-out;
-      }
-
-      .icon-microphone-alt,
-      .icon-check,
-      .icon-forward,
-      .icon-send {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-    }
-
-    &.record {
-      .icon-microphone-alt {
-        animation: grow-icon 0.4s ease-out;
-      }
-
-      .icon-send,
-      .icon-check,
-      .icon-forward,
-      .icon-schedule {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-    }
-
-    &.edit {
-      .icon-check {
-        animation: grow-icon 0.4s ease-out;
-      }
-
-      .icon-send,
-      .icon-forward,
-      .icon-microphone-alt,
-      .icon-schedule {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-    }
-
-    &.forward {
-      --color-primary: #212121;
-
-      .icon-forward {
-        --color-primary: #707478;
-
-        animation: grow-icon 0.4s ease-out;
-      }
-
-      .icon-send,
-      .icon-check,
-      .icon-microphone-alt,
-      .icon-schedule {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-    }
-
-    &.view-once {
-      .icon-one-filled {
-        animation: hide-icon 0.4s forwards ease-out;
-      }
-      .icon-view-once {
-        animation: grow-icon 0.4s ease-out;
-      }
-      &.active {
-        .icon-view-once {
-          animation: hide-icon 0.4s forwards ease-out;
-        }
-        .icon-one-filled {
-          animation: grow-icon 0.4s ease-out;
-        }
-      }
-    }
-
-    &.not-ready > .icon {
-      animation-duration: 0ms !important;
-    }
-  }
-
   &:not(.mounted) > .Button,
   body.no-message-composer-animations & > .Button {
     .icon-send,
@@ -406,6 +233,176 @@
     .icon-forward,
     .icon-check {
       color: var(--color-primary);
+    }
+
+    > .Button {
+      flex-shrink: 0;
+      margin-left: 0.5rem;
+
+      &:not(.danger) {
+        color: var(--color-composer-button);
+      }
+
+      @media (max-width: 600px) {
+        width: 2.875rem;
+        height: 2.875rem;
+      }
+
+      .icon-send,
+      .icon-schedule,
+      .icon-forward,
+      .icon-microphone-alt,
+      .icon-check,
+      .icon-view-once,
+      .icon-one-filled {
+        position: absolute;
+      }
+
+      @media (hover: hover) {
+        &:not(:active):not(:focus):not(:hover) {
+          .icon-send,
+          .icon-schedule,
+          .icon-forward,
+          .icon-check {
+          }
+        }
+      }
+
+      @media (hover: none) {
+        &:not(:active):not(:focus) {
+          .icon-send,
+          .icon-schedule,
+          .icon-forward,
+          .icon-check {
+            color: var(--color-primary);
+          }
+        }
+      }
+
+      &.cancel {
+        position: relative;
+        z-index: 1;
+
+        &:hover,
+        &.active {
+          background: var(--color-chat-hover);
+        }
+      }
+
+      &.recording {
+        position: relative;
+        z-index: 0;
+        transition: box-shadow 0.1s;
+      }
+
+      &.story-reaction-button {
+        --custom-emoji-size: 1.5rem;
+
+        overflow: visible !important;
+
+        &:hover {
+          background-color: var(--color-background) !important;
+        }
+
+        .icon-heart {
+          transition: color 0.2s ease-out;
+        }
+
+        .story-reaction-heart {
+          color: var(--color-heart) !important;
+        }
+      }
+
+      &.send,
+      &.sendOneTime {
+        .icon-send {
+          animation: grow-icon 0.4s ease-out;
+        }
+
+        .icon-microphone-alt,
+        .icon-forward,
+        .icon-check,
+        .icon-schedule {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+      }
+
+      &.schedule {
+        .icon-schedule {
+          animation: grow-icon 0.4s ease-out;
+        }
+
+        .icon-microphone-alt,
+        .icon-check,
+        .icon-forward,
+        .icon-send {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+      }
+
+      &.record {
+        .icon-microphone-alt {
+          animation: grow-icon 0.4s ease-out;
+        }
+
+        .icon-send,
+        .icon-check,
+        .icon-forward,
+        .icon-schedule {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+      }
+
+      &.edit {
+        .icon-check {
+          animation: grow-icon 0.4s ease-out;
+        }
+
+        .icon-send,
+        .icon-forward,
+        .icon-microphone-alt,
+        .icon-schedule {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+      }
+
+      &.forward {
+        --color-primary: #212121;
+
+        .icon-forward {
+          --color-primary: #707478;
+
+          animation: grow-icon 0.4s ease-out;
+        }
+
+        .icon-send,
+        .icon-check,
+        .icon-microphone-alt,
+        .icon-schedule {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+      }
+
+      &.view-once {
+        .icon-one-filled {
+          animation: hide-icon 0.4s forwards ease-out;
+        }
+        .icon-view-once {
+          animation: grow-icon 0.4s ease-out;
+        }
+        &.active {
+          .icon-view-once {
+            animation: hide-icon 0.4s forwards ease-out;
+          }
+          .icon-one-filled {
+            animation: grow-icon 0.4s ease-out;
+          }
+        }
+      }
+
+      &.not-ready > .icon {
+        animation-duration: 0ms !important;
+      }
     }
   }
 
