@@ -26,6 +26,9 @@
 
   .toogle-play-wrapper {
     margin: 0;
+    .Button {
+      background-color: var(--color-blue);
+    }
 
     .icon-view-once {
       position: absolute;
