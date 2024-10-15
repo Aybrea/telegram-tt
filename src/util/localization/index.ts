@@ -317,7 +317,6 @@ export function getTranslationFn(): LangFn {
 }
 
 function getString(langKey: LangKey, count: number, options?: Pick<LangFnOptions, 'pluralValue'>) {
-  console.log('🚀 ~ getString ~ langPack:', langPack);
   let langPackStringValue = langPack?.strings[langKey];
 
   // if (!langPackStringValue && !fallbackLangPack) {
@@ -331,7 +330,6 @@ function getString(langKey: LangKey, count: number, options?: Pick<LangFnOptions
 
   const pluralSuffix = formatters?.pluralRules.select(options?.pluralValue || count) || 'other';
 
-  console.log('🚀 ~ getString ~ langPackStringValue:', langPackStringValue, '|', langKey);
   const string = isPluralLangString(langPackStringValue)
     ? (langPackStringValue[pluralSuffix] || langPackStringValue.other)
     : langPackStringValue;
@@ -353,10 +351,8 @@ function processTranslation(
 
   const variableEntries = variables ? Object.entries(variables) : [];
   const finalString = variableEntries.reduce((result, [key, value]) => {
-    console.log(333333);
     return result.replace(`{${key}}`, String(value));
   }, string);
-  console.log('🚀 ~ finalString ~ ', string, variableEntries);
 
   TRANSLATION_CACHE.set(cacheKey, finalString);
 
