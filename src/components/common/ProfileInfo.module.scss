@@ -62,7 +62,13 @@
 
 .photoWrapper {
   width: 100%;
-  position: absolute;
+  height: 12.6rem;
+  // position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   left: 0;
   top: 0;
   bottom: 0;

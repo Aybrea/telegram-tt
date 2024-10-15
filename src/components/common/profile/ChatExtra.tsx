@@ -1,6 +1,7 @@
+import type { ChangeEvent } from 'react';
 import type { FC } from '../../../lib/teact/teact';
 import React, {
-  memo, useEffect, useMemo, useState,
+  memo, useCallback, useEffect, useMemo, useState,
 } from '../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../global';
 
@@ -38,6 +39,7 @@ import formatUsername from '../helpers/formatUsername';
 import renderText from '../helpers/renderText';
 
 import useEffectWithPrevDeps from '../../../hooks/useEffectWithPrevDeps';
+import useFlag from '../../../hooks/useFlag';
 import useLang from '../../../hooks/useLang';
 import useLastCallback from '../../../hooks/useLastCallback';
 import useMedia from '../../../hooks/useMedia';
@@ -46,6 +48,8 @@ import useDevicePixelRatio from '../../../hooks/window/useDevicePixelRatio';
 
 import Chat from '../../left/main/Chat';
 import Button from '../../ui/Button';
+import ConfirmDialog from '../../ui/ConfirmDialog';
+import InputText from '../../ui/InputText';
 import ListItem from '../../ui/ListItem';
 import Skeleton from '../../ui/placeholder/Skeleton';
 import Switcher from '../../ui/Switcher';
@@ -111,8 +115,11 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     openMapModal,
     requestCollectibleInfo,
     requestMainWebView,
+    deleteContact,
+    closeManagement,
   } = getActions();
 
+  const [isDeleteDialogOpen, openDeleteDialog, closeDeleteDialog] = useFlag();
   const {
     id: userId,
     usernames,
@@ -130,7 +137,11 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
   const oldLang = useOldLang();
   const lang = useLang();
 
+  const currentLastName = user ? (user.lastName || '') : '';
+
   const [areNotificationsEnabled, setAreNotificationsEnabled] = useState(!isMuted);
+  const [lastName, setLastName] = useState(currentLastName);
+  const [isProfileFieldsTouched, setIsProfileFieldsTouched] = useState(false);
 
   useEffect(() => {
     setAreNotificationsEnabled(!isMuted);
@@ -256,6 +267,17 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     });
   });
 
+  const handleDeleteContact = useCallback(() => {
+    deleteContact({ userId });
+    closeDeleteDialog();
+    closeManagement();
+  }, [closeDeleteDialog, closeManagement, deleteContact, userId]);
+
+  const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
+    setIsProfileFieldsTouched(true);
+  }, []);
+
   const appTermsInfo = lang('ProfileOpenAppAbout', {
     terms: (
       <SafeLink
@@ -325,7 +347,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
   }
 
   return (
-    <div className="ChatExtra">
+    <div className={styles.chatExtra}>
       {personalChannel && (
         <div className={styles.personalChannel}>
           <h3 className={styles.personalChannelTitle}>{oldLang('ProfileChannel')}</h3>
@@ -344,7 +366,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
       )}
       {Boolean(formattedNumber?.length) && (
         // eslint-disable-next-line react/jsx-no-bind
-        <ListItem icon="phone" multiline narrow ripple onClick={handlePhoneClick}>
+        <ListItem multiline narrow ripple onClick={handlePhoneClick}>
           <span className="title" dir={lang.isRtl ? 'rtl' : undefined}>{formattedNumber}</span>
           <span className="subtitle">{oldLang('Phone')}</span>
         </ListItem>
@@ -384,9 +406,67 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
           <span className="subtitle">{oldLang('SetUrlPlaceholder')}</span>
         </ListItem>
       )}
-      {birthday && (
+      {/* {birthday && (
         <UserBirthday key={peerId} birthday={birthday} user={user!} isInSettings={isInSettings} />
+      )} */}
+      <ListItem
+        multiline
+        narrow
+        ripple
+      >
+        <div className={styles.flexItem}>
+          <span>备注</span>
+          <span className={styles.dimmed}>Kaer</span>
+        </div>
+      </ListItem>
+      {/* <InputText
+        id="user-last-name"
+        label={lang('UserInfo.LastNamePlaceholder')}
+        onChange={handleLastNameChange}
+        value={lastName}
+      /> */}
+      <ListItem
+        multiline
+        narrow
+        ripple
+        // eslint-disable-next-line react/jsx-no-bind
+        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+      >
+        <div className={styles.flexItem}>
+          <span>定时清理</span>
+          <span className={styles.dimmed}>未开启</span>
+        </div>
+      </ListItem>
+
+      {!isInSettings && (
+        <ListItem narrow ripple onClick={handleNotificationChange}>
+          <span>{oldLang('DoNotDisturb')}</span>
+          <Switcher
+            id="group-notifications"
+            label={userId ? 'Toggle User DoNotDisturb' : 'Toggle Chat DoNotDisturb'}
+            checked={!areNotificationsEnabled}
+            inactive
+          />
+        </ListItem>
       )}
+      <ListItem
+        multiline
+        narrow
+        ripple
+        // eslint-disable-next-line react/jsx-no-bind
+        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+      >
+        分享他的名片
+      </ListItem>
+      <ListItem
+        multiline
+        narrow
+        ripple
+        // eslint-disable-next-line react/jsx-no-bind
+        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+      >
+        搜索聊天记录
+      </ListItem>
       { hasMainMiniApp && (
         <ListItem
           multiline
@@ -405,17 +485,12 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
           </div>
         </ListItem>
       )}
-      {!isInSettings && (
-        <ListItem icon="unmute" narrow ripple onClick={handleNotificationChange}>
-          <span>{oldLang('Notifications')}</span>
-          <Switcher
-            id="group-notifications"
-            label={userId ? 'Toggle User Notifications' : 'Toggle Chat Notifications'}
-            checked={areNotificationsEnabled}
-            inactive
-          />
-        </ListItem>
-      )}
+      <ListItem ripple destructive onClick={openDeleteDialog}>
+        {lang('DeleteContact')}
+      </ListItem>
+      <ListItem ripple destructive onClick={openDeleteDialog}>
+        {lang('DeleteChatHistory')}
+      </ListItem>
       {businessWorkHours && (
         <BusinessHours businessHours={businessWorkHours} />
       )}
@@ -437,6 +512,14 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
           <span>{oldLang('SavedMessagesTab')}</span>
         </ListItem>
       )}
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={closeDeleteDialog}
+        text={lang('AreYouSureDeleteContact')}
+        confirmLabel={lang('DeleteContact')}
+        confirmHandler={handleDeleteContact}
+        confirmIsDestructive
+      />
     </div>
   );
 };

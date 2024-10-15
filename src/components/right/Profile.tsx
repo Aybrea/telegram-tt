@@ -693,7 +693,7 @@ const Profile: FC<OwnProps & StateProps> = ({
       {!noProfileInfo && !isSavedMessages && (
         renderProfileInfo(profileId, isRightColumnShown && canRenderContent, isSavedDialog)
       )}
-      {!isRestricted && (
+      {/* {!isRestricted && (
         <div
           className="shared-media"
         >
@@ -711,7 +711,7 @@ const Profile: FC<OwnProps & StateProps> = ({
           </Transition>
           <TabList activeTab={renderingActiveTab} tabs={tabs} onSwitchTab={handleSwitchTab} />
         </div>
-      )}
+      )} */}
 
       {canAddMembers && (
         <FloatingActionButton

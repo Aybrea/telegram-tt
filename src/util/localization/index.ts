@@ -175,7 +175,7 @@ function createFormatters() {
 }
 
 function updateLangPack(newLangPack: LangPack) {
-  langPack = newLangPack;
+  // langPack = newLangPack;
 
   TRANSLATION_CACHE.clear();
 
@@ -186,17 +186,18 @@ export async function initLocalization(langCode: string, canLoadFromServer?: boo
   if (language) return;
 
   const cachedData = await loadCachedLangData(langCode);
-  if (cachedData) {
-    langPack = cachedData.langPack;
-    language = cachedData.language;
-    createFormatters();
+  loadFallbackPack();
+  //   if (cachedData) {
+  //   langPack = cachedData.langPack;
+  //   language = cachedData.language;
+  //   createFormatters();
 
-    fetchDifference();
-  } else if (canLoadFromServer) {
-    await loadAndChangeLanguage(langCode);
-  } else {
-    loadFallbackPack();
-  }
+  //   fetchDifference();
+  // } else if (canLoadFromServer) {
+  //   await loadAndChangeLanguage(langCode);
+  // } else {
+  //   loadFallbackPack();
+  // }
 
   translationFn = createTranslationFn();
   scheduleCallbacks();
@@ -316,11 +317,12 @@ export function getTranslationFn(): LangFn {
 }
 
 function getString(langKey: LangKey, count: number, options?: Pick<LangFnOptions, 'pluralValue'>) {
+  console.log('🚀 ~ getString ~ langPack:', langPack);
   let langPackStringValue = langPack?.strings[langKey];
 
-  if (!langPackStringValue && !fallbackLangPack) {
-    loadFallbackPack();
-  }
+  // if (!langPackStringValue && !fallbackLangPack) {
+  loadFallbackPack();
+  // }
 
   langPackStringValue ||= fallbackLangPack?.strings[langKey];
   langPackStringValue ||= initialStrings[langKey];
@@ -329,6 +331,7 @@ function getString(langKey: LangKey, count: number, options?: Pick<LangFnOptions
 
   const pluralSuffix = formatters?.pluralRules.select(options?.pluralValue || count) || 'other';
 
+  console.log('🚀 ~ getString ~ langPackStringValue:', langPackStringValue, '|', langKey);
   const string = isPluralLangString(langPackStringValue)
     ? (langPackStringValue[pluralSuffix] || langPackStringValue.other)
     : langPackStringValue;
@@ -350,8 +353,10 @@ function processTranslation(
 
   const variableEntries = variables ? Object.entries(variables) : [];
   const finalString = variableEntries.reduce((result, [key, value]) => {
+    console.log(333333);
     return result.replace(`{${key}}`, String(value));
   }, string);
+  console.log('🚀 ~ finalString ~ ', string, variableEntries);
 
   TRANSLATION_CACHE.set(cacheKey, finalString);
 

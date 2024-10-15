@@ -461,7 +461,7 @@ export default {
     oneValue: 'Send File',
     otherValue: 'Send %d Files',
   },
-  Phone: 'Phone',
+  Phone: '电话',
   Reminders: 'Reminders',
   MessageScheduledOn: 'Scheduled for %1$s',
   NewPoll: 'New Poll',
@@ -523,4 +523,5 @@ export default {
   'AccountSettings.Logout': '确认',
   NewContact: '添加好友',
   'Contacts.PhoneNumber.NotRegistred': '用户不存在',
+  DoNotDisturb: '消息免打扰',
 } as ApiOldLangPack;

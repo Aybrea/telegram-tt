@@ -12,6 +12,7 @@ import {
 } from '../../global/helpers';
 import {
   selectChat,
+  selectChatMessages,
   selectCurrentMessageList,
   selectPeerPhotos,
   selectTabState,
@@ -77,6 +78,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
   emojiStatusSticker,
   profilePhotos,
   peerId,
+  isSavedMessages,
 }) => {
   const {
     openMediaViewer,
@@ -294,7 +296,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
       dir={lang.isRtl ? 'rtl' : undefined}
     >
       <div className={styles.photoWrapper}>
-        {renderPhotoTabs()}
+        {/* {renderPhotoTabs()} */}
         {!forceShowSelf && profilePhotos?.personalPhoto && (
           <div className={buildClassName(
             styles.fallbackPhoto,
@@ -324,11 +326,31 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
             </div>
           </div>
         )}
-        <Transition activeKey={currentPhotoIndex} name={slideAnimation}>
+        {/* <Transition activeKey={currentPhotoIndex} name={slideAnimation}>
           {renderPhoto}
-        </Transition>
-
-        {!isFirst && (
+        </Transition> */}
+        <Avatar
+          key={user?.id}
+          size="jumbo"
+          peer={user}
+          className="overlay-avatar"
+          isSavedMessages={isSavedMessages}
+          storyViewerMode="single-peer"
+        />
+        <div dir={lang.isRtl ? 'rtl' : 'auto'}>
+          {(user || chat) && (
+            <FullNameTitle
+              peer={(user || chat)!}
+              withEmojiStatus
+              emojiStatusSize={EMOJI_STATUS_SIZE}
+              onEmojiStatusClick={handleStatusClick}
+              noLoopLimit
+              canCopyTitle
+            />
+          )}
+        </div>
+        <div>Chat ID: 41312211</div>
+        {/* {!isFirst && (
           <button
             type="button"
             dir={lang.isRtl ? 'rtl' : undefined}
@@ -345,10 +367,10 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
             aria-label={lang('Next')}
             onClick={selectNextMedia}
           />
-        )}
+        )} */}
       </div>
 
-      <div className={styles.info} dir={lang.isRtl ? 'rtl' : 'auto'}>
+      {/* <div className={styles.info} dir={lang.isRtl ? 'rtl' : 'auto'}>
         {(user || chat) && (
           <FullNameTitle
             peer={(user || chat)!}
@@ -360,13 +382,13 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
           />
         )}
         {renderStatus()}
-      </div>
+      </div> */}
     </div>
   );
 };
 
 export default memo(withGlobal<OwnProps>(
-  (global, { peerId }): StateProps => {
+  (global, { peerId, forceShowSelf, userId }): StateProps => {
     const user = selectUser(global, peerId);
     const userStatus = selectUserStatus(global, peerId);
     const chat = selectChat(global, peerId);
@@ -378,6 +400,9 @@ export default memo(withGlobal<OwnProps>(
 
     const emojiStatus = (user || chat)?.emojiStatus;
     const emojiStatusSticker = emojiStatus ? global.customEmojis.byId[emojiStatus.documentId] : undefined;
+    const isSavedMessages = !forceShowSelf && user && user.isSelf;
+    const self = isSavedMessages ? user : selectUser(global, global.currentUserId!);
+    const areMessagesLoaded = Boolean(userId && selectChatMessages(global, userId));
 
     return {
       user,
@@ -387,6 +412,9 @@ export default memo(withGlobal<OwnProps>(
       avatarOwnerId,
       emojiStatusSticker,
       profilePhotos,
+      isSavedMessages,
+      areMessagesLoaded,
+      self,
       ...(topic && {
         topic,
         messagesCount: selectThreadMessagesCount(global, peerId, currentTopicId!),
