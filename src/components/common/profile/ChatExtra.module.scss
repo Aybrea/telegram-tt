@@ -2,8 +2,9 @@
   color: #000;
   padding: 0 1.25rem;
 }
+
 .chatExtra > * {
-  background-color: #fff;
+  background-color: var(--chat-extra-background, var(--color-background));
   margin-top: 1rem;
   border-radius: var(--border-radius-default);
 }

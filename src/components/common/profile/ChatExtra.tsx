@@ -364,13 +364,13 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
           />
         </div>
       )}
-      {Boolean(formattedNumber?.length) && (
+      {/* {Boolean(formattedNumber?.length) && (
         // eslint-disable-next-line react/jsx-no-bind
         <ListItem multiline narrow ripple onClick={handlePhoneClick}>
           <span className="title" dir={lang.isRtl ? 'rtl' : undefined}>{formattedNumber}</span>
           <span className="subtitle">{oldLang('Phone')}</span>
         </ListItem>
-      )}
+      )} */}
       {activeUsernames && renderUsernames(activeUsernames)}
       {description && Boolean(description.length) && (
         <ListItem
@@ -425,30 +425,30 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         onChange={handleLastNameChange}
         value={lastName}
       /> */}
-      <ListItem
-        multiline
-        narrow
-        ripple
-        // eslint-disable-next-line react/jsx-no-bind
-        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
-      >
-        <div className={styles.flexItem}>
-          <span>定时清理</span>
-          <span className={styles.dimmed}>未开启</span>
-        </div>
-      </ListItem>
-
-      {!isInSettings && (
-        <ListItem narrow ripple onClick={handleNotificationChange}>
-          <span>{oldLang('DoNotDisturb')}</span>
-          <Switcher
-            id="group-notifications"
-            label={userId ? 'Toggle User DoNotDisturb' : 'Toggle Chat DoNotDisturb'}
-            checked={!areNotificationsEnabled}
-            inactive
-          />
+      <div>
+        <ListItem
+          multiline
+          ripple
+          // eslint-disable-next-line react/jsx-no-bind
+          onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+        >
+          <div className={styles.flexItem}>
+            <span>定时清理</span>
+            <span className={styles.dimmed}>未开启</span>
+          </div>
         </ListItem>
-      )}
+        {!isInSettings && (
+          <ListItem ripple onClick={handleNotificationChange}>
+            <span>{oldLang('DoNotDisturb')}</span>
+            <Switcher
+              id="group-notifications"
+              label={userId ? 'Toggle User DoNotDisturb' : 'Toggle Chat DoNotDisturb'}
+              checked={!areNotificationsEnabled}
+              inactive
+            />
+          </ListItem>
+        )}
+      </div>
       <ListItem
         multiline
         narrow
@@ -485,12 +485,14 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
           </div>
         </ListItem>
       )}
-      <ListItem ripple destructive onClick={openDeleteDialog}>
-        {lang('DeleteContact')}
-      </ListItem>
-      <ListItem ripple destructive onClick={openDeleteDialog}>
-        {lang('DeleteChatHistory')}
-      </ListItem>
+      <div>
+        <ListItem ripple destructive onClick={openDeleteDialog}>
+          {lang('DeleteContact')}
+        </ListItem>
+        <ListItem ripple destructive onClick={openDeleteDialog}>
+          {lang('DeleteChatHistory')}
+        </ListItem>
+      </div>
       {businessWorkHours && (
         <BusinessHours businessHours={businessWorkHours} />
       )}
