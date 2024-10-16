@@ -134,6 +134,7 @@ const Modal: FC<OwnProps> = ({
 
     return (
       <div className={buildClassName('modal-header', headerClassName)}>
+        <div className="modal-title">{title}</div>
         {withCloseButton && (
           <Button
             className={buildClassName(hasAbsoluteCloseButton && 'modal-absolute-close-button')}
@@ -146,7 +147,6 @@ const Modal: FC<OwnProps> = ({
             <Icon name="close" />
           </Button>
         )}
-        <div className="modal-title">{title}</div>
       </div>
     );
   }
