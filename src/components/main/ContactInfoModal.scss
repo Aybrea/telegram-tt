@@ -1,0 +1,81 @@
+.ContactInfoModal {
+  --chat-extra-background: var(--color-chat-active);
+  .modal-dialog {
+    max-width: 30rem;
+  }
+  .dialog-buttons {
+    width: 10.375rem;
+    margin: auto;
+  }
+
+  &__new-contact {
+    display: flex;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+    }
+
+    &-fieldset {
+      flex: 1;
+      margin-inline-start: 1rem;
+
+      @media (max-width: 500px) {
+        margin-inline-start: 0;
+        margin-top: 1rem;
+      }
+
+      .my-chatId {
+        text-align: center;
+        color: var(--color-text-meta);
+      }
+    }
+    &-fieldset > * + * {
+      margin-top: 1rem; /* 对于 space-y-4 */
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    &-info {
+      margin-inline-start: 1rem;
+    }
+  }
+
+  .profile-info {
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0 1.25rem;
+      .ListItem {
+        flex: 1;
+        margin-bottom: 0;
+        background-color: var(--chat-extra-background);
+        border-radius: var(--border-radius-default);
+        &-button {
+          flex-direction: column;
+          i {
+            font-size: 1.375rem;
+          }
+        }
+      }
+    }
+  }
+
+  &__user-status {
+    color: var(--color-text-secondary);
+  }
+
+  &__phone-number {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  &__help-text {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+  }
+}
