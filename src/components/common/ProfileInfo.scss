@@ -26,6 +26,11 @@
     margin: 0.3rem auto;
   }
 
+  .info-id {
+    color: var(--color-text-meta);
+    font-size: 0.875rem;
+  }
+
   .VerifiedIcon,
   .StarIcon {
     --color-fill: var(--color-white);
