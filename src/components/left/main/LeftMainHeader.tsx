@@ -48,6 +48,9 @@ import StatusButton from './StatusButton';
 
 import './LeftMainHeader.scss';
 
+import dropdownIconPath from '../../../assets/nIcons/dropdown-stack.svg';
+import goBackIconPath from '../../../assets/nIcons/go-back.svg';
+
 type OwnProps = {
   shouldHideSearch?: boolean;
   content: LeftColumnContent;
@@ -165,12 +168,15 @@ const LeftMainHeader: FC<OwnProps & StateProps> = ({
         onClick={hasMenu ? onTrigger : () => onReset()}
         ariaLabel={hasMenu ? oldLang('AccDescrOpenMenu2') : 'Return to chat list'}
       >
-        <div className={buildClassName(
+        {/* <div className={buildClassName(
           'animated-menu-icon',
           !hasMenu && 'state-back',
           shouldSkipTransition && 'no-animation',
         )}
-        />
+        /> */}
+        <div className="menu-icon">
+          <img src={hasMenu ? dropdownIconPath : goBackIconPath} alt="" />
+        </div>
       </Button>
     );
   }, [hasMenu, isMobile, oldLang, onReset, shouldSkipTransition]);
