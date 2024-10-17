@@ -166,6 +166,7 @@ export async function importContact({
   firstName?: string;
   lastName?: string;
 }) {
+  // call api
   const result = await invokeRequest(new GramJs.contacts.ImportContacts({
     contacts: [buildInputContact({
       phone: phone || '',

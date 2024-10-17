@@ -349,7 +349,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
             />
           )}
         </div>
-        <div>Chat ID: 41312211</div>
+        <div className="info-id">Chat ID: 41312211</div>
         {/* {!isFirst && (
           <button
             type="button"

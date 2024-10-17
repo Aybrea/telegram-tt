@@ -632,6 +632,7 @@ export type TabState = {
   newContact?: {
     userId?: string;
     isByPhoneNumber?: boolean;
+    requirePermission?: boolean;
   };
 
   openedGame?: {

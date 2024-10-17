@@ -70,9 +70,11 @@ import PaymentModal from '../payment/PaymentModal.async';
 import ReceiptModal from '../payment/ReceiptModal.async';
 import RightColumn from '../right/RightColumn';
 import StoryViewer from '../story/StoryViewer.async';
+import AddContactModal from './AddContactModal';
 import AttachBotRecipientPicker from './AttachBotRecipientPicker.async';
 import BotTrustModal from './BotTrustModal.async';
 import ConfettiContainer from './ConfettiContainer';
+import ContactInfoModal from './ContactInfoModal';
 import DeleteFolderDialog from './DeleteFolderDialog.async';
 import Dialogs from './Dialogs.async';
 import DownloadManager from './DownloadManager';
@@ -121,6 +123,7 @@ type StateProps = {
   addedCustomEmojiIds?: string[];
   newContactUserId?: string;
   newContactByPhoneNumber?: boolean;
+  newContactRequirePermission?: boolean;
   openedGame?: TabState['openedGame'];
   gameTitle?: string;
   isRatePhoneCallModalOpen?: boolean;
@@ -177,6 +180,7 @@ const Main = ({
   isPhoneCallActive,
   newContactUserId,
   newContactByPhoneNumber,
+  newContactRequirePermission,
   openedGame,
   gameTitle,
   isRatePhoneCallModalOpen,
@@ -524,6 +528,7 @@ const Main = ({
   useBackgroundMode(handleBlur, handleFocus, !!IS_ELECTRON);
   useBeforeUnload(handleBlur);
   usePreventPinchZoomGesture(isMediaViewerOpen || isStoryViewerOpen);
+  console.log('🚀 ~ newContactUserId || newContactByPhoneNumber:', newContactUserId, newContactByPhoneNumber);
 
   return (
     <div ref={containerRef} id="Main" className={className}>
@@ -552,10 +557,12 @@ const Main = ({
       {activeGroupCallId && <GroupCall groupCallId={activeGroupCallId} />}
       <ActiveCallHeader isActive={Boolean(activeGroupCallId || isPhoneCallActive)} />
       <NewContactModal
-        isOpen={Boolean(newContactUserId || newContactByPhoneNumber)}
+        isOpen={Boolean(newContactByPhoneNumber)}
         userId={newContactUserId}
         isByPhoneNumber={newContactByPhoneNumber}
       />
+      <ContactInfoModal isOpen={Boolean(newContactUserId)} />
+      <AddContactModal isOpen={Boolean(newContactRequirePermission)} />
       <GameModal openedGame={openedGame} gameTitle={gameTitle} />
       <DownloadManager />
       <ConfettiContainer />
@@ -660,6 +667,7 @@ export default memo(withGlobal<OwnProps>(
       addedCustomEmojiIds: global.customEmojis.added.setIds,
       newContactUserId: newContact?.userId,
       newContactByPhoneNumber: newContact?.isByPhoneNumber,
+      newContactRequirePermission: newContact?.requirePermission,
       openedGame,
       gameTitle,
       isRatePhoneCallModalOpen: Boolean(ratingPhoneCall),

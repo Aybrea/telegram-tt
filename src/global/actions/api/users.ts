@@ -29,6 +29,7 @@ import {
   updateUserSearch,
   updateUserSearchFetchingStatus,
 } from '../../reducers';
+import { updateTabState } from '../../reducers/tabs';
 import {
   selectChat,
   selectChatFullInfo,
@@ -362,6 +363,7 @@ addActionHandler('importContact', async (global, actions, payload): Promise<void
   } = payload;
 
   const result = await callApi('importContact', { phone, firstName, lastName });
+  // this result is userId
   if (!result) {
     actions.showNotification({
       message: langProvider.oldTranslate('Contacts.PhoneNumber.NotRegistred'),
@@ -371,10 +373,15 @@ addActionHandler('importContact', async (global, actions, payload): Promise<void
     return;
   }
 
-  actions.openChat({ id: result, tabId });
+  // actions.openChat({ id: result, tabId }); // change this to open next modal
 
   global = getGlobal();
   global = closeNewContactDialog(global, tabId);
+  global = updateTabState(global, {
+    newContact: {
+      userId: result, // 5152936446
+    },
+  }, tabId);
   setGlobal(global);
 });
 

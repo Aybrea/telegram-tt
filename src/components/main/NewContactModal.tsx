@@ -57,7 +57,6 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isShown, markIsShown, unmarkIsShown] = useFlag();
-  const [isOpenInfo, markIsOpenInfo, unmarkIsOpenInfo] = useFlag(false);
   const [firstName, setFirstName] = useState<string>(renderingUser?.firstName ?? '');
   const [lastName, setLastName] = useState<string>(renderingUser?.lastName ?? '');
   const [phone, setPhone] = useState<string>(renderingUser?.phoneNumber ?? '');
@@ -101,12 +100,11 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
 
   const handleSubmit = useCallback(() => {
     if (isByPhoneNumber || !userId) {
-      // importContact({
-      //   firstName,
-      //   lastName,
-      //   phoneNumber: phone,
-      // });
-      markIsOpenInfo();
+      importContact({
+        firstName,
+        lastName,
+        phoneNumber: phone,
+      });
     } else {
       updateContact({
         userId,
@@ -239,19 +237,18 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
   }
 
   return (
-    <>
-      <Modal
-        className="NewContactModal"
-        title={lang('NewContact')}
-        isOpen={isOpen}
-        onClose={handleClose}
-        onCloseAnimationEnd={unmarkIsShown}
-        hasCloseButton
-      >
-        {/* {renderingUser && renderAddContact()} */}
-        {renderingIsByPhoneNumber && renderCreateContact()}
-        <div className="dialog-buttons">
-          {/* <Button
+    <Modal
+      className="NewContactModal"
+      title={lang('NewContact')}
+      isOpen={isOpen}
+      onClose={handleClose}
+      onCloseAnimationEnd={unmarkIsShown}
+      hasCloseButton
+    >
+      {/* {renderingUser && renderAddContact()} */}
+      {renderingIsByPhoneNumber && renderCreateContact()}
+      <div className="dialog-buttons">
+        {/* <Button
           isText
           className="confirm-dialog-button"
           onClick={handleClose}
@@ -266,17 +263,15 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
         >
           {lang('Done')}
         </Button> */}
-          <Button
-            size="tiny"
-            disabled={!canBeSubmitted}
-            onClick={handleSubmit}
-          >
-            {lang('Search')}
-          </Button>
-        </div>
-      </Modal>
-      <ContactInfoModal isOpen={isOpenInfo} />
-    </>
+        <Button
+          size="tiny"
+          disabled={!canBeSubmitted}
+          onClick={handleSubmit}
+        >
+          {lang('Search')}
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

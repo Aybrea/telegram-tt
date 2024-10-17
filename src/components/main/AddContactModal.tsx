@@ -2,16 +2,12 @@ import type { FC } from '../../lib/teact/teact';
 import React, {
   memo, useCallback, useEffect, useRef, useState,
 } from '../../lib/teact/teact';
-import {
-  getActions, getGlobal, setGlobal, withGlobal,
-} from '../../global';
+import { getActions, withGlobal } from '../../global';
 
 import type { ApiCountryCode, ApiUser, ApiUserStatus } from '../../api/types';
 
 import { getUserStatus } from '../../global/helpers';
-import { updateTabState } from '../../global/reducers/tabs';
 import { selectUser, selectUserStatus } from '../../global/selectors';
-import { getCurrentTabId } from '../../util/establishMultitabRole';
 import { formatPhoneNumberWithCode } from '../../util/phoneNumber';
 import { IS_TOUCH_ENV } from '../../util/windowEnvironment';
 import renderText from '../common/helpers/renderText';
@@ -29,9 +25,9 @@ import InputText from '../ui/InputText';
 import ListItem from '../ui/ListItem';
 import Modal from '../ui/Modal';
 import SearchInput from '../ui/SearchInput';
-import AddContactModal from './AddContactModal';
+import TextArea from '../ui/TextArea';
 
-import './ContactInfoModal.scss';
+import './AddContactModal.scss';
 
 const ANIMATION_DURATION = 200;
 
@@ -47,7 +43,7 @@ type StateProps = {
   phoneCodeList: ApiCountryCode[];
 };
 
-const ContactInfoModal: FC<OwnProps & StateProps> = ({
+const AddContactModal: FC<OwnProps & StateProps> = ({
   isOpen,
   userId,
   isByPhoneNumber,
@@ -68,6 +64,7 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
   const [lastName, setLastName] = useState<string>(renderingUser?.lastName ?? '');
   const [phone, setPhone] = useState<string>(renderingUser?.phoneNumber ?? '');
   const [shouldSharePhoneNumber, setShouldSharePhoneNumber] = useState<boolean>(true);
+  const [isOpenAddContact, markIsOpenAddContact, unmarkIsOpenAddContact] = useFlag(true);
 
   useEffect(() => {
     if (isOpen) {
@@ -92,15 +89,8 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
     setPhone('');
   }, [closeNewContactDialog]);
 
-  const handleAddContact = useCallback(() => {
-    const tabId = getCurrentTabId();
-    let global = getGlobal();
-    global = updateTabState(global, {
-      newContact: {
-        requirePermission: true,
-      },
-    }, tabId);
-    setGlobal(global);
+  const handleSendRequest = useCallback(() => {
+    closeNewContactDialog();
   }, []);
 
   if (!isOpen && !isShown) {
@@ -111,57 +101,27 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
 
   return (
     <Modal
-      className="ContactInfoModal"
+      className="AddContactModal"
+      title="添加好友"
       isOpen={isOpen}
       onClose={handleClose}
       onCloseAnimationEnd={unmarkIsShown}
       hasCloseButton
     >
-      {/* {renderingUser && renderAddContact()} */}
-      {/* {renderingIsByPhoneNumber && renderCreateContact()} */}
       <div className="profile-info">
-
         <ProfileInfo peerId={profileId} canPlayVideo={false} />
-        <Button
-          fluid
-          onClick={handleAddContact}
-          size="tiny"
-          isRtl={lang.isRtl}
-          style="margin: 0 auto 1rem auto"
-        >
-          <i className="icon icon-add" />
-          添加联系人
-        </Button>
-        <div className="flex-row">
-          <ListItem
-            narrow
-            ripple
-          >
-            <i className="icon icon-message-filled" />
-            <span>
-              消息
-            </span>
-          </ListItem>
-          <ListItem
-            narrow
-            ripple
-          >
-            <i className="icon icon-phone-filled" />
-            <span>
-              语音
-            </span>
-          </ListItem>
-          <ListItem
-            narrow
-            ripple
-          >
-            <i className="icon icon-user-lock" />
-            <span>
-              私密聊天
-            </span>
-          </ListItem>
+        <div className="input-block">
+          <div className="input-title">发送好友申请</div>
+          <TextArea maxLength={200} />
+          <div className="send-button">
+            <Button
+              onClick={handleSendRequest}
+              size="tiny"
+              isRtl={lang.isRtl}
+            >发送
+            </Button>
+          </div>
         </div>
-        <ChatExtra chatOrUserId={profileId} isSavedDialog={false} />
       </div>
     </Modal>
   );
@@ -176,4 +136,4 @@ export default memo(withGlobal<OwnProps>(
       phoneCodeList: global.countryList.phoneCodes,
     };
   },
-)(ContactInfoModal));
+)(AddContactModal));
