@@ -1,4 +1,6 @@
-import React, { memo, useMemo } from '../../../lib/teact/teact';
+import React, {
+  memo, useCallback, useMemo, useState,
+} from '../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../global';
 
 import type { GlobalState } from '../../../global/types';
@@ -31,6 +33,7 @@ import useLastCallback from '../../../hooks/useLastCallback';
 import useOldLang from '../../../hooks/useOldLang';
 
 import AttachBotItem from '../../middle/composer/AttachBotItem';
+import ConfirmDialog from '../../ui/ConfirmDialog';
 import MenuItem from '../../ui/MenuItem';
 import Switcher from '../../ui/Switcher';
 import Toggle from '../../ui/Toggle';
@@ -64,6 +67,7 @@ const LeftSideMenuItems = ({
   onBotMenuClosed,
 }: OwnProps & StateProps) => {
   const {
+    signOut,
     openChat,
     setSettingOption,
     updatePerformanceSettings,
@@ -73,6 +77,8 @@ const LeftSideMenuItems = ({
   } = getActions();
   const oldLang = useOldLang();
   const lang = useLang();
+
+  const [isSignOutDialogOpen, setIsSignOutDialogOpen] = useState(false);
 
   const animationLevelValue = animationLevel !== ANIMATION_LEVEL_MIN
     ? (animationLevel === ANIMATION_LEVEL_MAX ? 'max' : 'mid') : 'min';
@@ -130,15 +136,28 @@ const LeftSideMenuItems = ({
     openChatWithInfo({ id: currentUserId, shouldReplaceHistory: true, profileTab: 'stories' });
   });
 
+  const openSignOutConfirmation = useCallback(() => {
+    setIsSignOutDialogOpen(true);
+  }, []);
+
+  const closeSignOutConfirmation = useCallback(() => {
+    setIsSignOutDialogOpen(false);
+  }, []);
+
+  const handleSignOutMessage = useCallback(() => {
+    closeSignOutConfirmation();
+    signOut({ forceInitApi: true });
+  }, [closeSignOutConfirmation, signOut]);
+
   return (
     <>
-      <MenuItem
+      {/* <MenuItem
         icon="saved-messages"
         onClick={handleSelectSaved}
       >
         {oldLang('SavedMessages')}
-      </MenuItem>
-      {archiveSettings.isHidden && (
+      </MenuItem> */}
+      {/* {archiveSettings.isHidden && (
         <MenuItem
           icon="archive"
           onClick={onSelectArchived}
@@ -148,14 +167,14 @@ const LeftSideMenuItems = ({
             <div className="right-badge">{archivedUnreadChatsCount}</div>
           )}
         </MenuItem>
-      )}
+      )} */}
       <MenuItem
         icon="user"
         onClick={onSelectContacts}
       >
         {oldLang('Contacts')}
       </MenuItem>
-      {bots.map((bot) => (
+      {/* {bots.map((bot) => (
         <AttachBotItem
           bot={bot}
           theme={theme}
@@ -164,20 +183,20 @@ const LeftSideMenuItems = ({
           onMenuOpened={onBotMenuOpened}
           onMenuClosed={onBotMenuClosed}
         />
-      ))}
-      <MenuItem
+      ))} */}
+      {/* <MenuItem
         icon="play-story"
         onClick={handleOpenMyStories}
       >
         {oldLang('Settings.MyStories')}
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem
         icon="settings"
         onClick={onSelectSettings}
       >
         {oldLang('Settings')}
       </MenuItem>
-      <MenuItem
+      {/* <MenuItem
         icon="darkmode"
         onClick={handleDarkModeToggle}
       >
@@ -233,7 +252,16 @@ const LeftSideMenuItems = ({
         >
           {lang('MenuInstallApp')}
         </MenuItem>
-      )}
+      )} */}
+      <MenuItem icon="logout" onClick={openSignOutConfirmation}>{lang('LogOutTitle')}</MenuItem>
+      <ConfirmDialog
+        isOpen={isSignOutDialogOpen}
+        onClose={closeSignOutConfirmation}
+        text={lang('SureLogout')}
+        confirmLabel={lang('GeneralConfirm')}
+        confirmHandler={handleSignOutMessage}
+        confirmIsDestructive
+      />
     </>
   );
 };

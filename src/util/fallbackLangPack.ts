@@ -3,11 +3,12 @@
 import type { ApiOldLangPack } from '../api/types';
 
 export default {
+  AppName: '加密聊天',
   Search: '搜索',
   SavedMessages: 'Saved Messages',
   ArchivedChats: 'Archived Chats',
-  Contacts: 'Contacts',
-  Settings: 'Settings',
+  Contacts: '通讯录',
+  Settings: '设置',
   lng_menu_night_mode: 'Night Mode',
   lng_settings_enable_night_theme: 'Enable night mode',
   'Appearance.Animations': 'ANIMATIONS',
@@ -130,7 +131,9 @@ export default {
   'LastSeen.JustNow': 'last seen just now',
   AccDescrGoBack: 'Go back',
   SETTINGS: 'Settings',
-  LogOutTitle: 'Log Out',
+  LogOutTitle: '退出登录',
+  SureLogout: '确定要退出登录吗?',
+  ConfirmLabel: '确定',
   lng_settings_information: 'Edit profile',
   Filters: 'Folders',
   'Telegram.GeneralSettingsViewController': 'General Settings',

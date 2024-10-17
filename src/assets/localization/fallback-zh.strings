@@ -461,10 +461,10 @@
 "FilterNew" = "New Folder";
 "FilterEdit" = "Edit folder";
 "AutoDeleteConfirm" = "Confirm";
-"LogOutTitle" = "Log Out";
+"LogOutTitle" = "退出登录";
 "AccDescrGoBack" = "Go back";
-"SureLogout" = "Are you sure you want to log out?";
-"AccountSettingsLogout" = "Log Out";
+"SureLogout" = "确定要退出登录吗?";
+"AccountSettingsLogout" = "退出登录";
 "TelegramGeneralSettingsViewController" = "General Settings";
 "UserInfoNotificationsEnabled" = "Enabled";
 "UserInfoNotificationsDisabled" = "Disabled";
@@ -1243,7 +1243,7 @@
 "StatsNoShares" = "No shares";
 "AvatarChangeTitle" = "Change your profile photo";
 "PleaseWait" = "Please wait...";
-"GeneralConfirm" = "Confirm";
+"GeneralConfirm" = "确定";
 "ImageCropTitle" = "Drag to reposition";
 "NewChatReturnBackAria" = "Return to member selection";
 "FoldersAllChatsDesc" = "All unarchived chats";
