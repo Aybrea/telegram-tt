@@ -524,4 +524,9 @@ export default {
   NewContact: '添加好友',
   'Contacts.PhoneNumber.NotRegistred': '用户不存在',
   DoNotDisturb: '消息免打扰',
+  SharedContactMessage: '对话',
+  SharedContactAdd: '添加',
+  'Notification.Invited': '你已加入群组',
+  'GroupInfo.LabelOwner': '群主',
+  AttachContact: '分享联系人',
 } as ApiOldLangPack;
