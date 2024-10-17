@@ -3,15 +3,31 @@
   // justify-content: space-around;
   align-items: center;
   position: relative;
+  justify-content: space-around;
 }
 
-.root > * {
-  padding: 0 50px; /* Apply padding to create space between items and dividers */
-  position: relative;
+.root > div {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 0.875rem;
+}
+
+.root::before,
+.root::after {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 80%;
+  background-color: #f0f0f0;
+}
+
+.root::before {
+  left: 33%; /* 定位到第一个和第二个元素之间 */
+}
+
+.root::after {
+  left: 66%; /* 定位到第二个和第三个元素之间 */
 }
 
 /* Add a vertical divider between items */
