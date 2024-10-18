@@ -26,7 +26,7 @@ import Button from '../ui/Button';
 import Loading from '../ui/Loading';
 
 // import blankUrl from '../../assets/blank.png';
-import nlogoIconPath from '../../assets/nlogo.svg';
+import nlogoIconPath from '../../assets/nIcons/nLogo.svg';
 
 type StateProps =
   Pick<GlobalState, 'connectionState' | 'authState' | 'authQrCode'>
