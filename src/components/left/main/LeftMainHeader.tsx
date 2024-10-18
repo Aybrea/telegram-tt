@@ -168,6 +168,7 @@ const LeftMainHeader: FC<OwnProps & StateProps> = ({
         onClick={hasMenu ? onTrigger : () => onReset()}
         ariaLabel={hasMenu ? oldLang('AccDescrOpenMenu2') : 'Return to chat list'}
       >
+        {/* <div className="avatar-online avatar-online-shown" /> */}
         {/* <div className={buildClassName(
           'animated-menu-icon',
           !hasMenu && 'state-back',
