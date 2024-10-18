@@ -10,6 +10,8 @@ import useAppLayout from '../../hooks/useAppLayout';
 import useLastCallback from '../../hooks/useLastCallback';
 import useOldLang from '../../hooks/useOldLang';
 
+import ChatBadge from '../left/main/ChatBadge';
+
 import './MenuItem.scss';
 
 export type MenuItemProps = {
@@ -28,6 +30,7 @@ export type MenuItemProps = {
   ariaLabel?: string;
   withWrap?: boolean;
   withPreventDefaultOnMouseDown?: boolean;
+  unreadCount?: number;
 };
 
 const MenuItem: FC<MenuItemProps> = (props) => {
@@ -47,6 +50,7 @@ const MenuItem: FC<MenuItemProps> = (props) => {
     onContextMenu,
     clickArg,
     withPreventDefaultOnMouseDown,
+    unreadCount,
   } = props;
 
   const lang = useOldLang();
@@ -89,10 +93,24 @@ const MenuItem: FC<MenuItemProps> = (props) => {
   const content = (
     <>
       {!customIcon && icon && (
-        <i
-          className={isCharIcon ? 'icon icon-char' : `icon icon-${icon}`}
-          data-char={isCharIcon ? icon : undefined}
-        />
+        <>
+          <i
+            className={isCharIcon ? 'icon icon-char' : `icon icon-${icon}`}
+            data-char={isCharIcon ? icon : undefined}
+          />
+          {unreadCount
+            && (
+              <ChatBadge
+                chat={{
+                  isForum: false,
+                  unreadCount,
+                  id: 'menuItemBadge',
+                  type: 'chatTypeChannel',
+                  title: 'unread menu message',
+                }}
+              />
+            )}
+        </>
       )}
       {customIcon}
       {children}

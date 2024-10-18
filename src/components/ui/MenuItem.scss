@@ -15,6 +15,21 @@
   --ripple-color: rgba(0, 0, 0, 0.08);
   cursor: var(--custom-cursor, pointer);
   unicode-bidi: plaintext;
+  position: relative;
+
+  .ChatBadge-transition {
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    .ChatBadge {
+      min-width: 1rem; /* 减小最小宽度 */
+      height: 1rem; /* 减小高度 */
+      border-radius: 0.5rem; /* 调整圆角，保持和高度比例一致 */
+      padding: 0 0.3rem; /* 减少左右内边距 */
+      font-size: 0.75rem; /* 减小字体大小 */
+      line-height: 1rem; /* 设置行高与高度一致 */
+    }
+  }
 
   .right-badge {
     min-width: 1.5rem;
@@ -96,7 +111,8 @@
     transition: none !important;
   }
 
-  .Switcher, .menu-item-badge {
+  .Switcher,
+  .menu-item-badge {
     margin-left: auto;
   }
 

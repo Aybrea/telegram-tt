@@ -170,6 +170,7 @@ const LeftSideMenuItems = ({
       )} */}
       <MenuItem
         icon="user"
+        unreadCount={undefined}
         onClick={onSelectContacts}
       >
         {oldLang('Contacts')}
