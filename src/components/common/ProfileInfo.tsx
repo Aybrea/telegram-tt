@@ -347,7 +347,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
             />
           )}
         </div>
-        <div className="info-id">Chat ID: 41312211</div>
+        <div className="info-id">Chat ID: {peerId}</div>
         {/* {!isFirst && (
           <button
             type="button"
