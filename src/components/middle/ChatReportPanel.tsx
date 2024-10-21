@@ -58,9 +58,9 @@ const ChatReportPanel: FC<OwnProps & StateProps> = ({
 
   const handleAddContact = useLastCallback(() => {
     openAddContactDialog({ userId: chatId });
-    if (isAutoArchived) {
-      toggleChatArchived({ id: chatId });
-    }
+    // if (isAutoArchived) {
+    //   toggleChatArchived({ id: chatId });
+    // }
   });
 
   const handleConfirmBlock = useLastCallback(() => {
