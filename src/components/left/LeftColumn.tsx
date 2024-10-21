@@ -63,6 +63,7 @@ enum ContentType {
   NewGroup,
   // eslint-disable-next-line no-shadow
   NewChannel,
+  NewContacts,
 }
 
 const RENDER_COUNT = Object.keys(ContentType).length / 2;
@@ -122,6 +123,9 @@ function LeftColumn({
     case LeftColumnContent.NewGroupStep1:
     case LeftColumnContent.NewGroupStep2:
       contentType = ContentType.NewGroup;
+      break;
+    case LeftColumnContent.NewContacts:
+      contentType = ContentType.NewContacts;
       break;
   }
 
@@ -367,6 +371,10 @@ function LeftColumn({
     setGlobalSearchChatId({ id: forumPanelChatId });
   });
 
+  const handleSwitchContactType = useLastCallback(() => {
+    setContent(LeftColumnContent.NewContacts);
+  });
+
   useEffect(
     () => {
       const isArchived = content === LeftColumnContent.Archived;
@@ -530,6 +538,7 @@ function LeftColumn({
             onSearchQuery={handleSearchQuery}
             onSettingsScreenSelect={handleSettingsScreenSelect}
             onReset={handleReset}
+            onSwitchContactType={handleSwitchContactType}
             shouldSkipTransition={shouldSkipHistoryAnimations}
             isAppUpdateAvailable={isAppUpdateAvailable}
             isElectronUpdateAvailable={isElectronUpdateAvailable}

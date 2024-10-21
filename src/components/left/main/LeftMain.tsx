@@ -26,6 +26,7 @@ import ChatFolders from './ChatFolders';
 import ContactList from './ContactList.async';
 import ForumPanel from './ForumPanel';
 import LeftMainHeader from './LeftMainHeader';
+import NewContactList from './NewContactList';
 
 import './LeftMain.scss';
 
@@ -45,6 +46,7 @@ type OwnProps = {
   onSettingsScreenSelect: (screen: SettingsScreens) => void;
   onTopicSearch: NoneToVoidFunction;
   onReset: () => void;
+  onSwitchContactType: () => void;
 };
 
 const TRANSITION_RENDER_COUNT = Object.keys(LeftColumnContent).length / 2;
@@ -68,6 +70,7 @@ const LeftMain: FC<OwnProps> = ({
   onSettingsScreenSelect,
   onReset,
   onTopicSearch,
+  onSwitchContactType,
 }) => {
   const { closeForumPanel } = getActions();
   const [isNewChatButtonShown, setIsNewChatButtonShown] = useState(IS_TOUCH_ENV);
@@ -217,7 +220,16 @@ const LeftMain: FC<OwnProps> = ({
                   />
                 );
               case LeftColumnContent.Contacts:
-                return <ContactList filter={contactsFilter} isActive={isActive} onReset={onReset} />;
+                return (
+                  <ContactList
+                    filter={contactsFilter}
+                    isActive={isActive}
+                    onReset={onReset}
+                    onSwitchContactType={onSwitchContactType}
+                  />
+                );
+              case LeftColumnContent.NewContacts:
+                return <NewContactList filter={contactsFilter} isActive={isActive} onReset={onReset} />;
               default:
                 return undefined;
             }

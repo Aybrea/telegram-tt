@@ -277,6 +277,7 @@ export type StickerSetOrReactionsSetOrRecent = Pick<ApiStickerSet, (
 )> & { reactions?: ApiReaction[] };
 
 export enum LeftColumnContent {
+  NewContacts,
   ChatList,
   GlobalSearch,
   Settings,

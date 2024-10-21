@@ -1,0 +1,30 @@
+.root {
+  padding: 0.8rem 1rem;
+}
+
+.root > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.divider {
+  height: 0.625rem;
+  background: #f5f6f8;
+  margin: 1rem 0;
+}
+
+.emptyUser {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.item {
+  .ListItem-button {
+    justify-content: space-between;
+  }
+}
