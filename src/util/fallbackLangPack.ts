@@ -532,4 +532,7 @@ export default {
   'Notification.Invited': '你已加入群组',
   'GroupInfo.LabelOwner': '群主',
   AttachContact: '分享联系人',
+  lng_new_contact_add: '添加好友',
+  lng_new_contact_block: '加入黑名单',
+  lng_report_spam_and_leave: '举报并离开',
 } as ApiOldLangPack;
