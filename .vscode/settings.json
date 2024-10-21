@@ -8,6 +8,7 @@
   "editor.renderWhitespace": "boundary",
   "window.autoDetectColorScheme": true,
   "workbench.editor.tabActionLocation": "left",
+  "workbench.editor.limit.value": 7,
   "workbench.fontAliasing": "antialiased",
   "workbench.list.smoothScrolling": true,
   "workbench.preferredDarkColorTheme": "Default Dark Modern",
