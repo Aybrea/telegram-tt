@@ -78,7 +78,6 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
   emojiStatusSticker,
   profilePhotos,
   peerId,
-  isSavedMessages,
 }) => {
   const {
     openMediaViewer,
@@ -334,7 +333,6 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
           size="jumbo"
           peer={user}
           className="overlay-avatar"
-          isSavedMessages={isSavedMessages}
           storyViewerMode="single-peer"
         />
         <div dir={lang.isRtl ? 'rtl' : 'auto'}>
@@ -388,7 +386,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
 };
 
 export default memo(withGlobal<OwnProps>(
-  (global, { peerId, forceShowSelf, userId }): StateProps => {
+  (global, { peerId }): StateProps => {
     const user = selectUser(global, peerId);
     const userStatus = selectUserStatus(global, peerId);
     const chat = selectChat(global, peerId);
@@ -400,9 +398,6 @@ export default memo(withGlobal<OwnProps>(
 
     const emojiStatus = (user || chat)?.emojiStatus;
     const emojiStatusSticker = emojiStatus ? global.customEmojis.byId[emojiStatus.documentId] : undefined;
-    const isSavedMessages = !forceShowSelf && user && user.isSelf;
-    const self = isSavedMessages ? user : selectUser(global, global.currentUserId!);
-    const areMessagesLoaded = Boolean(userId && selectChatMessages(global, userId));
 
     return {
       user,
@@ -412,9 +407,6 @@ export default memo(withGlobal<OwnProps>(
       avatarOwnerId,
       emojiStatusSticker,
       profilePhotos,
-      isSavedMessages,
-      areMessagesLoaded,
-      self,
       ...(topic && {
         topic,
         messagesCount: selectThreadMessagesCount(global, peerId, currentTopicId!),
