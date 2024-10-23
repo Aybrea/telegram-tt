@@ -463,7 +463,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         narrow
         ripple
         // eslint-disable-next-line react/jsx-no-bind
-        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+        onClick={() => copy(link, '搜索聊天记录')}
       >
         搜索聊天记录
       </ListItem>

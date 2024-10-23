@@ -1016,10 +1016,6 @@ const Message: FC<OwnProps & StateProps> = ({
         outgoingStatus={outgoingStatus}
         signature={signature}
         withReactionOffset={reactionsPosition === 'inside'}
-        renderQuickReactionButton={
-          withQuickReactionButton && quickReactionPosition === 'in-meta' ? renderQuickReactionButton : undefined
-        }
-        availableReactions={availableReactions}
         isTranslated={Boolean(requestedTranslationLanguage ? currentTranslatedText : undefined)}
         effectEmoji={effect?.emoticon}
         onClick={handleMetaClick}
