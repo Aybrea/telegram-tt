@@ -1,7 +1,9 @@
 import type { FC } from '../../lib/teact/teact';
 import React, {
   memo, useCallback, useEffect, useLayoutEffect, useRef,
+  useState,
 } from '../../lib/teact/teact';
+import { getGlobal, setGlobal } from '../../lib/teact/teactn';
 import { getActions, withGlobal } from '../../global';
 
 import type { GlobalState } from '../../global/types';
@@ -9,8 +11,13 @@ import type { LangCode } from '../../types';
 
 import { DEFAULT_LANG_CODE, STRICTERDOM_ENABLED } from '../../config';
 import { disableStrict, enableStrict } from '../../lib/fasterdom/stricterdom';
+import { WebSocketClient } from '../../lib/guisejs/websocketClient';
+import { updateTabState } from '../../global/reducers/tabs';
 import buildClassName from '../../util/buildClassName';
+import { getCurrentTabId } from '../../util/establishMultitabRole';
 import { oldSetLanguage } from '../../util/oldLangProvider';
+import apiClient from '../../api/axios/axiosConfig';
+import { buildAuthStateUpdate, onAuthReady } from '../../api/gramjs/methods/auth';
 
 // import { LOCAL_TGS_URLS } from '../common/helpers/animatedAssets';
 // import renderText from '../common/helpers/renderText';
@@ -68,6 +75,61 @@ const AuthCode: FC<StateProps> = ({
   // const [markIsLoading, unmarkIsLoading] = useFlag();
   const [isQrMounted, markQrMounted, unmarkQrMounted] = useFlag();
 
+  const [message, setMessage] = useState<string>();
+
+  useEffect(() => {
+    // Construct the WebSocket URL with query parameters
+    const params = new URLSearchParams();
+    params.set('login', '123456');
+
+    // Build the WebSocket URL
+    const wsUrl = `ws://192.168.1.181:10708/ws?${params.toString()}`;
+
+    // Create an instance of WebSocketClient
+    const wsClient = new WebSocketClient({
+      url: wsUrl,
+      onOpen: (event) => {
+      },
+      onMessage: (value) => {
+        value = JSON.parse(value);
+        if (value.mod === 'loginId') {
+          setMessage(value?.data);
+        } else if (value.mod === 'success') {
+          const tabId = getCurrentTabId();
+          let global = getGlobal();
+          global = {
+            ...global,
+            authState: 'authorizationStateReady',
+          };
+          // global = updateTabState(global, {
+          //   authState: 'authorizationStateReady',
+          // }, tabId);
+          setGlobal(global);
+          console.log('🚀 ~ useEffect ~ global:', global);
+
+          // let global = getGlobal();
+          // global = updateTabState(global, {
+          //   newContact: {
+          //     requirePermission: true,
+          //   },
+          // }, tabId);
+          // setGlobal(global);
+        }
+      },
+      onClose: (event) => {
+        console.log('WebSocket connection closed:', event);
+      },
+      onError: (event) => {
+        console.error('WebSocket error:', event);
+      },
+    });
+
+    // Clean up on component unmount
+    return () => {
+      wsClient.close();
+    };
+  }, []);
+
   const { result: qrCode } = useAsync(async () => {
     const QrCodeStyling = (await ensureQrCodeStyling()).default;
     return new QrCodeStyling({
@@ -91,18 +153,21 @@ const AuthCode: FC<StateProps> = ({
   const transitionClassNames = useMediaTransitionDeprecated(isQrMounted);
 
   useLayoutEffect(() => {
-    if (!authQrCode || !qrCode) {
+    console.log('🚀 ~ useLayoutEffect ~ authQrCode:', qrCode);
+    if (!qrCode) {
       return () => {
         unmarkQrMounted();
       };
     }
+
+    console.log('🚀 ~ useLayoutEffect ~ authQrCode:', isConnected);
 
     if (!isConnected) {
       return undefined;
     }
 
     const container = qrCodeRef.current!;
-    const data = `${DATA_PREFIX}${authQrCode.token}`;
+    const data = message;
 
     if (STRICTERDOM_ENABLED) {
       disableStrict();
@@ -112,6 +177,7 @@ const AuthCode: FC<StateProps> = ({
       data,
     });
 
+    console.log('🚀 ~ useLayoutEffect ~ isQrMounted:', isQrMounted);
     if (!isQrMounted) {
       qrCode.append(container);
       markQrMounted();
@@ -146,12 +212,30 @@ const AuthCode: FC<StateProps> = ({
     returnToAuthPhoneNumber();
   }, [returnToAuthPhoneNumber]);
 
+  const handleSimulateScan = useCallback(
+    async () => {
+      // 登录信息
+      const res = await apiClient.post(
+        '/auth/code/login',
+        {
+          code: message,
+        },
+        {
+          headers: {
+            Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIxLCJpc3MiOiJza3kiLCJjbGllbnRfdHlwZSI6MSwiZXhwIjoxNzI5NzUwNDcwLCJpYXQiOjE3Mjk2NjQwNzB9.FNmc61pEO-FQ46CmDF21jkem9nMRfoPkjr4A2FepF9w',
+          },
+        },
+      );
+    },
+    [message],
+  );
+
   const isAuthReady = authState === 'authorizationStateWaitQrCode';
 
   return (
     <div id="auth-qr-form" className="custom-scroll">
       <div className="auth-form qr">
-        <h1>{lang('Login.QR.Title')}</h1>
+        <h1>Chat App 网页版</h1>
         <div className="qr-outer">
           <div
             className={buildClassName('qr-inner', transitionClassNames)}
@@ -167,9 +251,10 @@ const AuthCode: FC<StateProps> = ({
           {!isQrMounted && <div className="qr-loading"><Loading /></div>}
         </div>
         <p>{lang('Login.QR.Description')}</p>
-        {isAuthReady && (
+        <Button isText onClick={handleSimulateScan}>模拟扫码</Button>
+        {/* {isAuthReady && (
           <Button isText onClick={habdleReturnToAuthPhoneNumber}>{lang('Login.QR.Cancel')}</Button>
-        )}
+        )} */}
         {/* {suggestedLanguage && suggestedLanguage !== language && continueText && (
           <Button isText isLoading={isLoading} onClick={handleLangChange}>{continueText}</Button>
         )} */}

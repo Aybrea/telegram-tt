@@ -244,6 +244,7 @@ async function signInUserWithQrCode(
             const { token, expires } = result;
 
             await Promise.race([
+                // 😀
                 authParams.qrCode({ token, expires }),
                 sleep(QR_CODE_TIMEOUT),
             ]);
