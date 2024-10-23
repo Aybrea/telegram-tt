@@ -37,7 +37,7 @@ export default {
   LeaveChannel: 'Leave Channel',
   AttachPhoto: 'Photo',
   UnreadMessages: 'Unread Messages',
-  'Weekday.Today': 'Today',
+  'Weekday.Today': '今天',
   'Weekday.Monday': '周一',
   Message: 'Message',
   AccDescrVoiceMessage: 'Record voice message',
