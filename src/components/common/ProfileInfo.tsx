@@ -5,6 +5,7 @@ import { getActions, withGlobal } from '../../global';
 import type {
   ApiChat, ApiPeerPhotos, ApiSticker, ApiTopic, ApiUser, ApiUserStatus,
 } from '../../api/types';
+import type { AvatarSize } from './Avatar';
 import { MediaViewerOrigin } from '../../types';
 
 import {
@@ -45,6 +46,7 @@ type OwnProps = {
   peerId: string;
   forceShowSelf?: boolean;
   canPlayVideo: boolean;
+  size?: AvatarSize;
 };
 
 type StateProps =
@@ -78,6 +80,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
   emojiStatusSticker,
   profilePhotos,
   peerId,
+  size = 'jumbo',
 }) => {
   const {
     openMediaViewer,
@@ -330,7 +333,7 @@ const ProfileInfo: FC<OwnProps & StateProps> = ({
         </Transition> */}
         <Avatar
           key={user?.id}
-          size="jumbo"
+          size={size}
           peer={user}
           className="overlay-avatar"
           storyViewerMode="single-peer"

@@ -22,7 +22,7 @@ import {
   INITIAL_PERFORMANCE_STATE_MID,
   INITIAL_PERFORMANCE_STATE_MIN,
 } from '../../../global/initialState';
-import { selectTabState, selectTheme } from '../../../global/selectors';
+import { selectTabState, selectTheme, selectUser } from '../../../global/selectors';
 import { getPromptInstall } from '../../../util/installPrompt';
 import { switchPermanentWebVersion } from '../../../util/permanentWebVersion';
 import { IS_ELECTRON } from '../../../util/windowEnvironment';
@@ -32,11 +32,16 @@ import useLang from '../../../hooks/useLang';
 import useLastCallback from '../../../hooks/useLastCallback';
 import useOldLang from '../../../hooks/useOldLang';
 
+import Avatar from '../../common/Avatar';
+import FullNameTitle from '../../common/FullNameTitle';
+import ProfileInfo from '../../common/ProfileInfo';
 import AttachBotItem from '../../middle/composer/AttachBotItem';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import MenuItem from '../../ui/MenuItem';
 import Switcher from '../../ui/Switcher';
 import Toggle from '../../ui/Toggle';
+
+import classes from './LeftSideMenuItems.module.scss';
 
 type OwnProps = {
   onSelectSettings: NoneToVoidFunction;
@@ -65,6 +70,7 @@ const LeftSideMenuItems = ({
   onSelectSettings,
   onBotMenuOpened,
   onBotMenuClosed,
+  user,
 }: OwnProps & StateProps) => {
   const {
     signOut,
@@ -168,6 +174,30 @@ const LeftSideMenuItems = ({
           )}
         </MenuItem>
       )} */}
+      <MenuItem
+        unreadCount={undefined}
+        onClick={onSelectContacts}
+      >
+        <div className={classes.profileInfo}>
+          <Avatar
+            key={currentUserId}
+            size="medium"
+            peer={user}
+            className="overlay-avatar"
+            storyViewerMode="single-peer"
+          />
+          <div>
+            <FullNameTitle
+              className={classes.fullName}
+              peer={(user)!}
+              withEmojiStatus
+              noLoopLimit
+              canCopyTitle
+            />
+            <div className={classes.infoId}>Chat ID: {currentUserId}</div>
+          </div>
+        </div>
+      </MenuItem>
       <MenuItem
         icon="user"
         unreadCount={undefined}
@@ -273,6 +303,8 @@ export default memo(withGlobal<OwnProps>(
     const {
       currentUserId, archiveSettings,
     } = global;
+    const user = selectUser(global, currentUserId);
+
     const { animationLevel } = global.settings.byKey;
     const attachBots = global.attachMenu.bots;
 
@@ -283,6 +315,7 @@ export default memo(withGlobal<OwnProps>(
       canInstall: Boolean(tabState.canInstall),
       archiveSettings,
       attachBots,
+      user,
     };
   },
 )(LeftSideMenuItems));
