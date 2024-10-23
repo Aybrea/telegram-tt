@@ -38,6 +38,7 @@ export default {
   AttachPhoto: 'Photo',
   UnreadMessages: 'Unread Messages',
   'Weekday.Today': 'Today',
+  'Weekday.Monday': '周一',
   Message: 'Message',
   AccDescrVoiceMessage: 'Record voice message',
   AccDescrPageDown: 'Go to bottom',

@@ -358,6 +358,7 @@ const HeaderActions: FC<OwnProps & StateProps> = ({
               {lang('BotRestart')}
             </Button>
           )}
+          {/* unblock user */}
           {canExpandActions && canUnblock && (
             <Button
               size="tiny"

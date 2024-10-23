@@ -172,14 +172,14 @@ const useChatContextActions = ({
       // actionMaskAsRead,
       // actionMarkAsUnread,
       actionPin,
-      // !isSelf && actionMute,
+      !isSelf && actionMute,
       // !isSelf && !isServiceNotifications && !isInFolder && actionArchive,
       // actionReport,
       actionDelete,
     ]) as MenuItemContextAction[];
   }, [
     chat, user, canChangeFolder, lang, handleChatFolderChange, isPinned, isInSearch, isMuted, currentUserId,
-    handleDelete, handleMute, handleReport, folderId, isSelf, isServiceNotifications, isSavedDialog, deleteTitle,
+    handleDelete, handleMute, handleReport, folderId, isSelf, isSavedDialog, deleteTitle,
     isPreview,
   ]);
 };

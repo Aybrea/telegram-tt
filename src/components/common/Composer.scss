@@ -524,6 +524,10 @@
       }
     }
   }
+  > .unblock-button {
+    width: 100%;
+    color: var(--color-blue);
+  }
 
   > .input-group {
     flex-grow: 1;

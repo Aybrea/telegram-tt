@@ -79,6 +79,7 @@ type StateProps = {
   hasSavedMessages?: boolean;
   personalChannel?: ApiChat;
   hasMainMiniApp?: boolean;
+  isBlocked?: boolean;
 };
 
 const DEFAULT_MAP_CONFIG = {
@@ -105,6 +106,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
   hasSavedMessages,
   personalChannel,
   hasMainMiniApp,
+  isBlocked,
 }) => {
   const {
     showNotification,
@@ -117,6 +119,8 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     requestMainWebView,
     deleteContact,
     closeManagement,
+    blockUser,
+    unblockUser,
   } = getActions();
 
   const [isDeleteDialogOpen, openDeleteDialog, closeDeleteDialog] = useFlag();
@@ -277,6 +281,14 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     setLastName(e.target.value);
     setIsProfileFieldsTouched(true);
   }, []);
+
+  const handleBlock = useLastCallback(() => {
+    blockUser({ userId: chatId });
+  });
+
+  const handleUnblock = useLastCallback(() => {
+    unblockUser({ userId: chatId });
+  });
 
   const appTermsInfo = lang('ProfileOpenAppAbout', {
     terms: (
@@ -467,7 +479,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
       >
         搜索聊天记录
       </ListItem>
-      { hasMainMiniApp && (
+      {hasMainMiniApp && (
         <ListItem
           multiline
           isStatic
@@ -489,8 +501,11 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         <ListItem ripple destructive onClick={openDeleteDialog}>
           {lang('DeleteContact')}
         </ListItem>
+        <ListItem ripple destructive onClick={isBlocked ? handleUnblock : handleBlock}>
+          {isBlocked ? '移出黑名单' : '加入黑名单'}
+        </ListItem>
         <ListItem ripple destructive onClick={openDeleteDialog}>
-          {lang('DeleteChatHistory')}
+          清除聊天记录
         </ListItem>
       </div>
       {businessWorkHours && (
@@ -564,6 +579,7 @@ export default memo(withGlobal<OwnProps>(
       chat,
       user,
       userFullInfo,
+      isBlocked: userFullInfo?.isBlocked,
       canInviteUsers,
       isMuted,
       topicId,

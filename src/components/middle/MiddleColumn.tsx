@@ -275,7 +275,7 @@ function MiddleColumn({
   const renderingCanRestartBot = usePrevDuringAnimation(canRestartBot, closeAnimationDuration);
   const renderingCanUnblock = usePrevDuringAnimation(canUnblock, closeAnimationDuration);
   const renderingCanPost = usePrevDuringAnimation(canPost, closeAnimationDuration)
-    && !renderingCanRestartBot && !renderingCanStartBot && !renderingCanSubscribe && !renderingCanUnblock
+    && !renderingCanRestartBot && !renderingCanStartBot && !renderingCanSubscribe
     && chatId !== TMP_CHAT_ID && !isContactRequirePremium;
   const renderingHasTools = usePrevDuringAnimation(hasTools, closeAnimationDuration);
   const renderingIsScrollDownShown = usePrevDuringAnimation(
@@ -577,6 +577,7 @@ function MiddleColumn({
                     editableInputId={EDITABLE_INPUT_ID}
                     editableInputCssSelector={EDITABLE_INPUT_CSS_SELECTOR}
                     inputId="message-input-text"
+                    canUnblock={canUnblock}
                   />
                 )}
                 {isPinnedMessageList && canUnpin && (
