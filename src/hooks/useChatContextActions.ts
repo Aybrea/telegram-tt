@@ -167,14 +167,14 @@ const useChatContextActions = ({
     const isInFolder = folderId !== undefined;
 
     return compact([
-      actionOpenInNewTab,
-      actionAddToFolder,
-      actionMaskAsRead,
-      actionMarkAsUnread,
+      // actionOpenInNewTab,
+      // actionAddToFolder,
+      // actionMaskAsRead,
+      // actionMarkAsUnread,
       actionPin,
-      !isSelf && actionMute,
-      !isSelf && !isServiceNotifications && !isInFolder && actionArchive,
-      actionReport,
+      // !isSelf && actionMute,
+      // !isSelf && !isServiceNotifications && !isInFolder && actionArchive,
+      // actionReport,
       actionDelete,
     ]) as MenuItemContextAction[];
   }, [
