@@ -8,6 +8,7 @@ import { StoryViewerOrigin } from '../../../types';
 import { filterUsersByName, sortUserIds } from '../../../global/helpers';
 
 import useAppLayout from '../../../hooks/useAppLayout';
+import useChatNewAddActions from '../../../hooks/useChatNewAddActions';
 import useHistoryBack from '../../../hooks/useHistoryBack';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 import useOldLang from '../../../hooks/useOldLang';
@@ -76,10 +77,8 @@ const NewContactList: FC<OwnProps & StateProps> = ({
 
   const [viewportIds, getMore] = useInfiniteScroll(undefined, listIds, Boolean(filter));
 
-  function sortList() {}
-
-  const handleNewContacts = useCallback(() => {
-  }, []);
+  const contextActions = useChatNewAddActions({
+  });
 
   return (
     <>
@@ -87,6 +86,40 @@ const NewContactList: FC<OwnProps & StateProps> = ({
         新的朋友
       </div>
       <InfiniteScroll items={viewportIds} onLoadMore={getMore} className="chat-list custom-scroll">
+        <div>待处理</div>
+        {viewportIds?.length ? (
+          viewportIds.map((id) => (
+            <ListItem
+              key={id}
+              className="chat-item-clickable contact-list-item"
+              contextActions={contextActions}
+            >
+              <PrivateChatInfo
+                userId={id}
+                forceShowSelf
+                avatarSize="large"
+                withStory
+                storyViewerOrigin={StoryViewerOrigin.ChatList}
+                ripple={!isMobile}
+              />
+              <div>
+                <Button pill size="tiny">验证</Button>
+              </div>
+            </ListItem>
+          ))
+        ) : viewportIds && !viewportIds.length ? (
+          <div className={styles.emptyUser}>
+            <div>
+              <img src={userBlockPath} alt="" />
+            </div>
+            <p className="no-results" key="no-results" dir="auto">
+              {filter.length ? '没有匹配的联系人' : '没有联系人'}
+            </p>
+          </div>
+        ) : (
+          <Loading key="loading" />
+        )}
+        <div>已处理</div>
         {viewportIds?.length ? (
           viewportIds.map((id) => (
             <ListItem
@@ -102,7 +135,7 @@ const NewContactList: FC<OwnProps & StateProps> = ({
                 ripple={!isMobile}
               />
               <div>
-                <Button pill size="tiny">验证</Button>
+                已添加
               </div>
             </ListItem>
           ))
