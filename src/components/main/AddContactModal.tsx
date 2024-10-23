@@ -109,7 +109,7 @@ const AddContactModal: FC<OwnProps & StateProps> = ({
       hasCloseButton
     >
       <div className="profile-info">
-        <ProfileInfo peerId={profileId} canPlayVideo={false} />
+        <ProfileInfo peerId={userId || ''} canPlayVideo={false} />
         <div className="input-block">
           <div className="input-title">发送好友申请</div>
           <TextArea maxLength={200} />

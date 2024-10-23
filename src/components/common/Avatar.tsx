@@ -135,9 +135,9 @@ const Avatar: FC<OwnProps> = ({
       return peer.avatarIcon;
     }
 
-    if (isSavedMessages) {
-      return isSavedDialog ? 'my-notes' : 'avatar-saved-messages';
-    }
+    // if (isSavedMessages) {
+    //   return isSavedDialog ? 'my-notes' : 'avatar-saved-messages';
+    // }
 
     if (isDeleted) {
       return 'avatar-deleted-account';

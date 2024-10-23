@@ -175,6 +175,7 @@ export async function importContact({
     })],
   }));
 
+  // importContact 已导入的判断
   if (result instanceof GramJs.contacts.ImportedContacts && result.users.length) {
     addUserToLocalDb(result.users[0]);
   }

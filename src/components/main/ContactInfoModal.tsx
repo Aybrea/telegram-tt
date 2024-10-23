@@ -10,7 +10,7 @@ import type { ApiCountryCode, ApiUser, ApiUserStatus } from '../../api/types';
 
 import { getUserStatus } from '../../global/helpers';
 import { updateTabState } from '../../global/reducers/tabs';
-import { selectUser, selectUserStatus } from '../../global/selectors';
+import { selectTabState, selectUser, selectUserStatus } from '../../global/selectors';
 import { getCurrentTabId } from '../../util/establishMultitabRole';
 import { formatPhoneNumberWithCode } from '../../util/phoneNumber';
 import { IS_TOUCH_ENV } from '../../util/windowEnvironment';
@@ -95,11 +95,22 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
   const handleAddContact = useCallback(() => {
     const tabId = getCurrentTabId();
     let global = getGlobal();
-    global = updateTabState(global, {
-      newContact: {
-        requirePermission: true,
+
+    // 获取当前的 newContact 对象，如果不存在则初始化为空对象
+    const currentNewContact = selectTabState(global, tabId).newContact || {};
+
+    // 更新 newContact，保留 userId，添加 requirePermission: true
+    global = updateTabState(
+      global,
+      {
+        newContact: {
+          ...currentNewContact,
+          requirePermission: true,
+        },
       },
-    }, tabId);
+      tabId,
+    );
+
     setGlobal(global);
   }, []);
 
@@ -120,8 +131,7 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
       {/* {renderingUser && renderAddContact()} */}
       {/* {renderingIsByPhoneNumber && renderCreateContact()} */}
       <div className="profile-info">
-
-        <ProfileInfo peerId={profileId} canPlayVideo={false} />
+        <ProfileInfo peerId={userId || ''} canPlayVideo={false} />
         <Button
           fluid
           onClick={handleAddContact}
@@ -130,7 +140,7 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
           style="margin: 0 auto 1rem auto"
         >
           <i className="icon icon-add" />
-          添加联系人
+          添加好友
         </Button>
         <div className="flex-row">
           <ListItem
@@ -161,7 +171,7 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
             </span>
           </ListItem>
         </div>
-        <ChatExtra chatOrUserId={profileId} isSavedDialog={false} />
+        <ChatExtra chatOrUserId={userId || ''} isSavedDialog={false} />
       </div>
     </Modal>
   );

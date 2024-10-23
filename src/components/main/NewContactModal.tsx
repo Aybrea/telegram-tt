@@ -22,7 +22,6 @@ import Checkbox from '../ui/Checkbox';
 import InputText from '../ui/InputText';
 import Modal from '../ui/Modal';
 import SearchInput from '../ui/SearchInput';
-import ContactInfoModal from './ContactInfoModal';
 
 import './NewContactModal.scss';
 
@@ -38,6 +37,7 @@ type StateProps = {
   user?: ApiUser;
   userStatus?: ApiUserStatus;
   phoneCodeList: ApiCountryCode[];
+  currentUserId?: string;
 };
 
 const NewContactModal: FC<OwnProps & StateProps> = ({
@@ -47,6 +47,7 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
   user,
   userStatus,
   phoneCodeList,
+  currentUserId,
 }) => {
   const { updateContact, importContact, closeNewContactDialog } = getActions();
 
@@ -229,7 +230,7 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
             onChange={handleFirstNameChange}
           />
           <p className="my-chatId">
-            我的Chat ID:41551916
+            我的Chat ID: {currentUserId}
           </p>
         </div>
       </div>
@@ -278,10 +279,12 @@ const NewContactModal: FC<OwnProps & StateProps> = ({
 export default memo(withGlobal<OwnProps>(
   (global, { userId }): StateProps => {
     const user = userId ? selectUser(global, userId) : undefined;
+    const { currentUserId } = global;
     return {
       user,
       userStatus: userId ? selectUserStatus(global, userId) : undefined,
       phoneCodeList: global.countryList.phoneCodes,
+      currentUserId,
     };
   },
 )(NewContactModal));

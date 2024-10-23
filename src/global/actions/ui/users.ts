@@ -19,20 +19,25 @@ addActionHandler('setUserSearchQuery', (global, actions, payload): ActionReturnT
   }, tabId);
 });
 
-addActionHandler('openAddContactDialog', (global, actions, payload): ActionReturnType => {
-  const { userId, tabId = getCurrentTabId() } = payload!;
-
-  return updateTabState(global, {
-    newContact: { userId },
-  }, tabId);
-});
-
 addActionHandler('openNewContactDialog', (global, actions, payload): ActionReturnType => {
   const { tabId = getCurrentTabId() } = payload || {};
 
+  // 添加好友第一步搜索
   return updateTabState(global, {
     newContact: {
       isByPhoneNumber: true,
+    },
+  }, tabId);
+});
+
+addActionHandler('openAddContactDialog', (global, actions, payload): ActionReturnType => {
+  const { userId, tabId = getCurrentTabId() } = payload!;
+
+  // 添加好友填写申请说明
+  return updateTabState(global, {
+    newContact: {
+      userId,
+      requirePermission: true,
     },
   }, tabId);
 });

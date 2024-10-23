@@ -33,6 +33,10 @@ export function selectIsCurrentUserPremium<T extends GlobalState>(global: T) {
   return Boolean(global.users.byId[global.currentUserId].isPremium);
 }
 
+export function selectCurrentUserId<T extends GlobalState>(global:T) {
+  return global.currentUserId;
+}
+
 export function selectIsPremiumPurchaseBlocked<T extends GlobalState>(global: T) {
   return global.appConfig?.isPremiumPurchaseBlocked ?? true;
 }

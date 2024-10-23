@@ -528,7 +528,6 @@ const Main = ({
   useBackgroundMode(handleBlur, handleFocus, !!IS_ELECTRON);
   useBeforeUnload(handleBlur);
   usePreventPinchZoomGesture(isMediaViewerOpen || isStoryViewerOpen);
-  console.log('🚀 ~ newContactUserId || newContactByPhoneNumber:', newContactUserId, newContactByPhoneNumber);
 
   return (
     <div ref={containerRef} id="Main" className={className}>
@@ -556,13 +555,14 @@ const Main = ({
       />
       {activeGroupCallId && <GroupCall groupCallId={activeGroupCallId} />}
       <ActiveCallHeader isActive={Boolean(activeGroupCallId || isPhoneCallActive)} />
+      {/* add friends */}
       <NewContactModal
         isOpen={Boolean(newContactByPhoneNumber)}
         userId={newContactUserId}
         isByPhoneNumber={newContactByPhoneNumber}
       />
-      <ContactInfoModal isOpen={Boolean(newContactUserId)} />
-      <AddContactModal isOpen={Boolean(newContactRequirePermission)} />
+      <ContactInfoModal isOpen={Boolean(newContactUserId && !newContactRequirePermission)} userId={newContactUserId} />
+      <AddContactModal isOpen={Boolean(newContactRequirePermission)} userId={newContactUserId} />
       <GameModal openedGame={openedGame} gameTitle={gameTitle} />
       <DownloadManager />
       <ConfettiContainer />
