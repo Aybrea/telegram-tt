@@ -40,7 +40,7 @@ const {
 
 const CSP = `
   default-src 'self';
-  connect-src 'self' wss://*.web.telegram.org blob: http: https: ${APP_ENV === 'development' ? 'wss:' : ''};
+  connect-src 'self' wss://*.web.telegram.org blob: http: https: wss: ws://192.168.1.181:10708;
   script-src 'self' 'wasm-unsafe-eval' https://t.me/_websync_ https://telegram.me/_websync_;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https://ss3.4sqi.net/img/categories_v2/
@@ -66,6 +66,14 @@ export default function createConfig(
       host: '0.0.0.0',
       allowedHosts: 'all',
       hot: false,
+      proxy: [
+        {
+          context: ['/auth'],
+          target: 'http://192.168.1.181:10707',
+          changeOrigin: true,
+          secure: false,
+        },
+      ],
       static: [
         {
           directory: path.resolve(__dirname, 'public'),
