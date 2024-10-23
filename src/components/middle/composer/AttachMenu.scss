@@ -1,5 +1,5 @@
 .AttachMenu {
-  display: flex;
+  align-self: flex-end;
 
   &--button {
     &:focus {
@@ -32,15 +32,6 @@
 
     .media-disabled > button {
       white-space: normal;
-    }
-  }
-
-  .MenuItem {
-    padding: 0.4rem;
-    // margin-right: 0.4rem;
-    border-radius: var(--border-radius-full);
-    .icon {
-      margin: 0;
     }
   }
 }

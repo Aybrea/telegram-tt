@@ -1930,93 +1930,45 @@ const Composer: FC<OwnProps & StateProps> = ({
                   </span>
                 )}
                 <div className="attachMenu-container">
-                  {/* <AttachMenu
-              chatId={chatId}
-              threadId={threadId}
-              editingMessage={editingMessage}
-              hasReplaceableMedia={canMediaBeReplaced}
-              isButtonVisible={!activeVoiceRecording}
-              canAttachMedia={canAttachMedia}
-              canAttachPolls={canAttachPolls}
-              canSendPhotos={canSendPhotos}
-              canSendVideos={canSendVideos}
-              canSendDocuments={canSendDocuments}
-              canSendAudios={canSendAudios}
-              onFileSelect={handleFileSelect}
-              onPollCreate={openPollModal}
-              isScheduled={isInScheduledList}
-              attachBots={isInMessageList ? attachBots : undefined}
-              peerType={attachMenuPeerType}
-              shouldCollectDebugLogs={shouldCollectDebugLogs}
-              theme={theme}
-              onMenuOpen={onAttachMenuOpen}
-              onMenuClose={onAttachMenuClose}
-              onMainHandler={mainButtonHandler}
-              mainButtonState={mainButtonState}
-            /> */}
-
-                  {activeVoiceRecording ? (
-                    <Button
-                      round
-                      color="danger"
-                      size="tiny"
-                      className="cancel"
-                      onClick={stopRecordingVoice}
-                      ariaLabel="Cancel voice recording"
-                    >
-                      <i className="icon icon-delete" />
-                    </Button>
-                  ) : (
-                    <>
-                      <Button
-                        ref={mainButtonRef}
-                        round
-                        color="translucent"
-                        size="tiny"
-                        disabled={areVoiceMessagesNotAllowed}
-                        allowDisabledClick
-                        noFastClick
-                        ariaLabel={lang(sendButtonAriaLabel)}
-                        onClick={handleDocumentSelect}
-                        onContextMenu={
-                          mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
-                        }
-                      >
-                        <i className="icon icon-document" />
-                      </Button>
-                      <Button
-                        ref={mainButtonRef}
-                        round
-                        color="translucent"
-                        size="tiny"
-                        disabled={areVoiceMessagesNotAllowed}
-                        allowDisabledClick
-                        noFastClick
-                        ariaLabel={lang(sendButtonAriaLabel)}
-                        onClick={handleQuickSelect}
-                        onContextMenu={
-                          mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
-                        }
-                      >
-                        <i className="icon icon-photo" />
-                      </Button>
-                      <Button
-                        ref={mainButtonRef}
-                        round
-                        color="translucent"
-                        size="tiny"
-                        disabled={areVoiceMessagesNotAllowed}
-                        allowDisabledClick
-                        noFastClick
-                        ariaLabel={lang(sendButtonAriaLabel)}
-                        onContextMenu={
-                          mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
-                        }
-                      >
-                        <i className="icon icon-schedule" />
-                      </Button>
-                    </>
-                  )}
+                  <AttachMenu
+                    chatId={chatId}
+                    threadId={threadId}
+                    editingMessage={editingMessage}
+                    hasReplaceableMedia={canMediaBeReplaced}
+                    isButtonVisible={!activeVoiceRecording}
+                    canAttachMedia={canAttachMedia}
+                    canAttachPolls={canAttachPolls}
+                    canSendPhotos={canSendPhotos}
+                    canSendVideos={canSendVideos}
+                    canSendDocuments={canSendDocuments}
+                    canSendAudios={canSendAudios}
+                    onFileSelect={handleFileSelect}
+                    onPollCreate={openPollModal}
+                    isScheduled={isInScheduledList}
+                    attachBots={isInMessageList ? attachBots : undefined}
+                    peerType={attachMenuPeerType}
+                    shouldCollectDebugLogs={shouldCollectDebugLogs}
+                    theme={theme}
+                    onMenuOpen={onAttachMenuOpen}
+                    onMenuClose={onAttachMenuClose}
+                    onMainHandler={mainButtonHandler}
+                    mainButtonState={mainButtonState}
+                  />
+                  <Button
+                    ref={mainButtonRef}
+                    round
+                    color="translucent"
+                    size="tiny"
+                    disabled={areVoiceMessagesNotAllowed}
+                    allowDisabledClick
+                    noFastClick
+                    ariaLabel={lang(sendButtonAriaLabel)}
+                    onContextMenu={
+                      mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
+                    }
+                  >
+                    <i className="icon icon-schedule" />
+                  </Button>
                   <Button
                     ref={mainButtonRef}
                     round
