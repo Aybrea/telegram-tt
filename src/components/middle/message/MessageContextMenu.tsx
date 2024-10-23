@@ -347,27 +347,6 @@ const MessageContextMenu: FC<OwnProps> = ({
       onClose={onClose}
       onCloseAnimationEnd={onCloseAnimationEnd}
     >
-      {withReactions && (
-        <ReactionSelector
-          enabledReactions={enabledReactions}
-          topReactions={topReactions}
-          allAvailableReactions={availableReactions}
-          defaultTagReactions={defaultTagReactions}
-          currentReactions={!isSponsoredMessage ? message.reactions?.results : undefined}
-          reactionsLimit={reactionsLimit}
-          onToggleReaction={onToggleReaction!}
-          isPrivate={isPrivate}
-          isReady={isReady}
-          canBuyPremium={canBuyPremium}
-          isCurrentUserPremium={isCurrentUserPremium}
-          isInSavedMessages={isInSavedMessages}
-          canPlayAnimatedEmojis={canPlayAnimatedEmojis}
-          onShowMore={handleOpenMessageReactionPicker}
-          onClose={onClose}
-          className={buildClassName(areItemsHidden && 'ReactionSelector-hidden')}
-        />
-      )}
-
       <div
         ref={scrollableRef}
         className={buildClassName(
