@@ -2,7 +2,7 @@ import type { FC } from '../../../lib/teact/teact';
 import React, { memo, useCallback, useMemo } from '../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../global';
 
-import type { ApiUser, ApiUserStatus } from '../../../api/types';
+import type { ApiChat, ApiUser, ApiUserStatus } from '../../../api/types';
 import { StoryViewerOrigin } from '../../../types';
 
 import { filterUsersByName, sortUserIds } from '../../../global/helpers';
@@ -11,6 +11,7 @@ import useAppLayout from '../../../hooks/useAppLayout';
 import useChatNewAddActions from '../../../hooks/useChatNewAddActions';
 import useHistoryBack from '../../../hooks/useHistoryBack';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
+import useLastCallback from '../../../hooks/useLastCallback';
 import useOldLang from '../../../hooks/useOldLang';
 
 import PrivateChatInfo from '../../common/PrivateChatInfo';
@@ -19,6 +20,7 @@ import FloatingActionButton from '../../ui/FloatingActionButton';
 import InfiniteScroll from '../../ui/InfiniteScroll';
 import ListItem from '../../ui/ListItem';
 import Loading from '../../ui/Loading';
+import Chat from './Chat';
 
 import styles from './NewContactList.module.scss';
 
@@ -34,6 +36,7 @@ export type OwnProps = {
 };
 
 type StateProps = {
+  chat?: ApiChat;
   usersById: Record<string, ApiUser>;
   userStatusesById: Record<string, ApiUserStatus>;
   contactIds?: string[];
@@ -47,6 +50,7 @@ const NewContactList: FC<OwnProps & StateProps> = ({
   contactIds,
   onReset,
   onSwitchContactType,
+  chat,
 }) => {
   const {
     openChat,
@@ -77,7 +81,11 @@ const NewContactList: FC<OwnProps & StateProps> = ({
 
   const [viewportIds, getMore] = useInfiniteScroll(undefined, listIds, Boolean(filter));
 
+  const handleDelete = useLastCallback(() => {
+    // openDeleteModal();
+  });
   const contextActions = useChatNewAddActions({
+    handleDelete,
   });
 
   return (
@@ -125,6 +133,7 @@ const NewContactList: FC<OwnProps & StateProps> = ({
             <ListItem
               key={id}
               className="chat-item-clickable contact-list-item"
+              contextActions={contextActions}
             >
               <PrivateChatInfo
                 userId={id}

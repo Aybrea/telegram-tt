@@ -287,6 +287,7 @@ const Chat: FC<OwnProps & StateProps> = ({
     currentUserId,
     isPreview,
   });
+  console.log('🚀 ~ contextActions:', contextActions);
 
   const isIntersecting = useIsIntersecting(ref, chat ? observeIntersection : undefined);
 
