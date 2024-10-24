@@ -929,7 +929,7 @@
 "UserInfoFirstNamePlaceholder" = "First Name";
 "UserInfoLastNamePlaceholder" = "Last Name";
 "DeleteContact" = "删除联系人";
-"AreYouSureDeleteContact" = "Are you sure you want to delete this contact?";
+"AreYouSureDeleteContact" = "确定要删除该联系人吗?";
 "ChannelBlockUser" = "Remove User";
 "ContextRemoveFromGroup" = "Remove from group";
 "NoGroupsInCommon" = "No common groups";

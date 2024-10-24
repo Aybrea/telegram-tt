@@ -60,7 +60,7 @@ const ConfirmDialog: FC<OwnProps> = ({
   return (
     <Modal
       className={buildClassName('confirm', className)}
-      title={title || lang('AppName')}
+      title={title || '提示'}
       header={header}
       isOpen={isOpen}
       onClose={onClose}
