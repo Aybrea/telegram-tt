@@ -47,6 +47,7 @@ import useOldLang from '../../../hooks/useOldLang';
 import useDevicePixelRatio from '../../../hooks/window/useDevicePixelRatio';
 
 import Chat from '../../left/main/Chat';
+import AnnotationDialog from '../../ui/AnnotationDialog';
 import Button from '../../ui/Button';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import InputText from '../../ui/InputText';
@@ -124,6 +125,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
   } = getActions();
 
   const [isDeleteDialogOpen, openDeleteDialog, closeDeleteDialog] = useFlag();
+  const [isAnnotationDialogOpen, openAnnotationDialog, closeAnnotationDialog] = useFlag();
   const {
     id: userId,
     usernames,
@@ -277,6 +279,8 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     closeManagement();
   }, [closeDeleteDialog, closeManagement, deleteContact, userId]);
 
+  const handleAnnotate = useCallback(() => {}, []);
+
   const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value);
     setIsProfileFieldsTouched(true);
@@ -425,10 +429,11 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         multiline
         narrow
         ripple
+        onClick={openAnnotationDialog}
       >
         <div className={styles.flexItem}>
           <span>备注</span>
-          <span className={styles.dimmed}>Kaer</span>
+          <span className={styles.dimmed}>{user?.lastName}</span>
         </div>
       </ListItem>
       {/* <InputText
@@ -536,6 +541,12 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         confirmLabel={lang('DeleteContact')}
         confirmHandler={handleDeleteContact}
         confirmIsDestructive
+      />
+      <AnnotationDialog
+        userId={userId}
+        isOpen={isAnnotationDialogOpen}
+        onClose={closeAnnotationDialog}
+        confirmHandler={handleAnnotate}
       />
     </div>
   );

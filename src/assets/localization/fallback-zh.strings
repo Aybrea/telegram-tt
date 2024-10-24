@@ -461,6 +461,7 @@
 "FilterNew" = "New Folder";
 "FilterEdit" = "Edit folder";
 "AutoDeleteConfirm" = "Confirm";
+"Confirm" = "确认";
 "LogOutTitle" = "退出登录";
 "AccDescrGoBack" = "Go back";
 "SureLogout" = "确定要退出登录吗?";
@@ -601,8 +602,8 @@
 "PreviewDraggingAddItems_one" = "Add Item";
 "PreviewDraggingAddItems_other" = "Add Items";
 "Caption" = "Caption";
-"AttachmentMenuPhotoOrVideo" = "Photo or Video";
-"AttachDocument" = "File";
+"AttachmentMenuPhotoOrVideo" = "图片与视频";
+"AttachDocument" = "文件";
 "Poll" = "Poll";
 "SlowModeHint" = "Slow Mode is active. You can send\nyour next message in {time}.";
 "SendMessageAsTitle" = "Send message as...";

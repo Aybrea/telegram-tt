@@ -173,6 +173,7 @@ export default {
   FilterAddChats: 'Add Chats',
   FilterExclude: 'Excluded Chats',
   AutoDeleteConfirm: 'Confirm',
+  Confirm: '确认',
   AddContact: '添加好友',
   FilterChatTypes: 'Chat types',
   FilterNonContacts: 'Non Contacts',
