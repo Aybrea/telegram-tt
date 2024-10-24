@@ -373,6 +373,15 @@ addActionHandler('importContact', async (global, actions, payload): Promise<void
     return;
   }
 
+  if (result === global.currentUserId) {
+    actions.showNotification({
+      message: '👍你就是自己最好的朋友',
+      tabId,
+    });
+
+    return;
+  }
+
   // actions.openChat({ id: result, tabId }); // change this to open next modal
 
   global = getGlobal();
