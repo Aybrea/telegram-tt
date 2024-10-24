@@ -175,7 +175,7 @@
 
 .composer-wrapper {
   flex-grow: 1;
-  max-width: calc(100% - 4rem);
+  // max-width: calc(100% - 4rem);
   background: var(--color-background);
   position: relative;
   z-index: 1;
@@ -207,7 +207,7 @@
   }
 
   @media (max-width: 600px) {
-    max-width: calc(100% - 3.375rem);
+    // max-width: calc(100% - 3.375rem);
   }
 }
 
