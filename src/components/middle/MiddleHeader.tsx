@@ -313,7 +313,6 @@ const MiddleHeader: FC<OwnProps & StateProps> = ({
   // this is how chat report panel is shown
   // const shouldShowChatReportPanel = true;
   // settings.canAddContact = true;
-  // console.log('🚀 ~ shouldShowChatReportPanel:', shouldShowChatReportPanel);
   const renderingChatSettings = useCurrentOrPrev(hasChatSettings ? settings : undefined, true);
 
   const {

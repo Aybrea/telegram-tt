@@ -45,6 +45,7 @@ type StateProps = {
   user?: ApiUser;
   userStatus?: ApiUserStatus;
   phoneCodeList: ApiCountryCode[];
+  contactIds?: string[];
 };
 
 const ContactInfoModal: FC<OwnProps & StateProps> = ({
@@ -52,10 +53,11 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
   userId,
   isByPhoneNumber,
   user,
-  userStatus,
-  phoneCodeList,
+  contactIds,
 }) => {
-  const { updateContact, importContact, closeNewContactDialog } = getActions();
+  const {
+    closeNewContactDialog, openChat,
+  } = getActions();
 
   const lang = useOldLang();
   const renderingUser = useCurrentOrPrev(user);
@@ -114,11 +116,14 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
     setGlobal(global);
   }, []);
 
+  const handleClickMsg = useCallback(() => {
+    handleClose();
+    openChat({ id: userId, shouldReplaceHistory: true }, { forceOnHeavyAnimation: true });
+  }, [userId, handleClose]);
+
   if (!isOpen && !isShown) {
     return undefined;
   }
-
-  const profileId = '5018592946';
 
   return (
     <Modal
@@ -132,20 +137,25 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
       {/* {renderingIsByPhoneNumber && renderCreateContact()} */}
       <div className="profile-info">
         <ProfileInfo peerId={userId || ''} canPlayVideo={false} />
-        <Button
-          fluid
-          onClick={handleAddContact}
-          size="tiny"
-          isRtl={lang.isRtl}
-          style="margin: 0 auto 1rem auto"
-        >
-          <i className="icon icon-add" />
-          添加好友
-        </Button>
+        {userId && !contactIds?.includes(userId)
+          && (
+            <Button
+              fluid
+              onClick={handleAddContact}
+              size="tiny"
+              isRtl={lang.isRtl}
+              style="margin: 0 auto 1rem auto"
+            >
+              <i className="icon icon-add" />
+              添加好友
+            </Button>
+          )}
+
         <div className="flex-row">
           <ListItem
             narrow
             ripple
+            onClick={handleClickMsg}
           >
             <i className="icon icon-message-filled" />
             <span>
@@ -180,9 +190,12 @@ const ContactInfoModal: FC<OwnProps & StateProps> = ({
 export default memo(withGlobal<OwnProps>(
   (global, { userId }): StateProps => {
     const user = userId ? selectUser(global, userId) : undefined;
+    const { userIds: contactIds } = global.contactList || {};
+
     return {
       user,
       userStatus: userId ? selectUserStatus(global, userId) : undefined,
+      contactIds,
       phoneCodeList: global.countryList.phoneCodes,
     };
   },

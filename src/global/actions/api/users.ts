@@ -391,7 +391,6 @@ addActionHandler('importContact', async (global, actions, payload): Promise<void
       userId: result, // 5152936446
     },
   }, tabId);
-  console.log('🚀 ~ addActionHandler ~ result:', result);
   setGlobal(global);
 });
 

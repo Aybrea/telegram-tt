@@ -929,8 +929,8 @@
 "EnableReactions" = "Enable Reactions";
 "UserInfoFirstNamePlaceholder" = "First Name";
 "UserInfoLastNamePlaceholder" = "Last Name";
-"DeleteContact" = "删除联系人";
-"AreYouSureDeleteContact" = "确定要删除该联系人吗?";
+"DeleteContact" = "删除好友";
+"AreYouSureDeleteContact" = "确定要删除该好友吗?";
 "ChannelBlockUser" = "Remove User";
 "ContextRemoveFromGroup" = "Remove from group";
 "NoGroupsInCommon" = "No common groups";
