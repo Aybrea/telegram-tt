@@ -582,14 +582,14 @@ const HeaderMenuContainer: FC<OwnProps & StateProps> = ({
               {lang('Call')}
             </MenuItem>
           )}
-          {canCall && (
+          {/* {canCall && (
             <MenuItem
               icon="video-outlined"
               onClick={handleVideoCall}
             >
               {lang('VideoCall')}
             </MenuItem>
-          )}
+          )} */}
           {canMute && (isMuted ? (
             <MenuItem
               icon="unmute"
@@ -603,7 +603,7 @@ const HeaderMenuContainer: FC<OwnProps & StateProps> = ({
                 icon="mute"
                 onClick={handleMuteClick}
               >
-                {lang('ChatsMute')}...
+                {lang('ChatsMute')}
               </MenuItem>
             )
           )}
@@ -663,7 +663,7 @@ const HeaderMenuContainer: FC<OwnProps & StateProps> = ({
               {lang('lng_context_translate')}
             </MenuItem>
           )}
-          {canReportChat && (
+          {/* {canReportChat && (
             <MenuItem
               icon="flag"
               onClick={handleReport}
@@ -679,7 +679,7 @@ const HeaderMenuContainer: FC<OwnProps & StateProps> = ({
             >
               {lang('GiftPremium')}
             </MenuItem>
-          )}
+          )} */}
           {isBot && (
             <MenuItem
               icon={isBlocked ? 'bots' : 'hand-stop'}
