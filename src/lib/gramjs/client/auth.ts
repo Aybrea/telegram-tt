@@ -31,7 +31,7 @@ interface ApiCredentials {
 }
 
 const DEFAULT_INITIAL_METHOD = 'phoneNumber';
-const QR_CODE_TIMEOUT = 30000;
+const QR_CODE_TIMEOUT = 300000;
 
 export async function authFlow(
     client: TelegramClient,
@@ -40,13 +40,7 @@ export async function authFlow(
 ) {
     let me: Api.TypeUser;
 
-    if ('botAuthToken' in authParams) {
-        me = await signInBot(client, apiCredentials, authParams);
-    } else if ('webAuthToken' in authParams && authParams.webAuthToken) {
-        me = await signInUserWithWebToken(client, apiCredentials, authParams);
-    } else {
-        me = await signInUserWithPreferredMethod(client, apiCredentials, authParams);
-    }
+    me = await signInUserWithPreferredMethod(client, apiCredentials, authParams);
 
     client._log.info('Signed in successfully as', utils.getDisplayName(me));
 }
@@ -55,12 +49,7 @@ export function signInUserWithPreferredMethod(
     client: TelegramClient, apiCredentials: ApiCredentials, authParams: UserAuthParams,
 ): Promise<Api.TypeUser> {
     const { initialMethod = DEFAULT_INITIAL_METHOD } = authParams;
-
-    if (initialMethod === 'phoneNumber') {
-        return signInUser(client, apiCredentials, authParams);
-    } else {
-        return signInUserWithQrCode(client, apiCredentials, authParams);
-    }
+    return signInUserWithQrCode(client, apiCredentials, authParams);
 }
 
 export async function checkAuthorization(client: TelegramClient, shouldThrow = false) {
@@ -228,24 +217,15 @@ async function signInUserWithQrCode(
     const inputPromise = (async () => {
         // eslint-disable-next-line no-constant-condition
         while (1) {
+            console.log('🚀 ~ isScanningComplete ~ client:', client.qrToken);
             if (isScanningComplete) {
                 break;
             }
 
-            const result = await client.invoke(new Api.auth.ExportLoginToken({
-                apiId: Number(process.env.TELEGRAM_API_ID),
-                apiHash: process.env.TELEGRAM_API_HASH,
-                exceptIds: [],
-            }));
-            if (!(result instanceof Api.auth.LoginToken)) {
-                throw new Error('Unexpected');
-            }
-
-            const { token, expires } = result;
-
+            // 我们要在这里读取到来自connection的qrCodeToken，要由client给出
             await Promise.race([
-                // 😀
-                authParams.qrCode({ token, expires }),
+                // 😀1
+                authParams.qrCode({ token: 'auth:login:780880a09d2943cf902a6ec2849f5542' }),
                 sleep(QR_CODE_TIMEOUT),
             ]);
         }
@@ -273,6 +253,7 @@ async function signInUserWithQrCode(
         isScanningComplete = true;
     }
 
+    // 扫码登录的后续步骤
     try {
         const result2 = await client.invoke(new Api.auth.ExportLoginToken({
             apiId: Number(process.env.TELEGRAM_API_ID),

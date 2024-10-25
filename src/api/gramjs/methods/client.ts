@@ -80,6 +80,7 @@ export async function init(initialArgs: ApiInitialArgs) {
   // eslint-disable-next-line no-restricted-globals
   (self as any).maxBufferSize = maxBufferSize;
 
+  // 使用通讯端
   client = new TelegramClient(
     session,
     process.env.TELEGRAM_API_ID,
@@ -114,17 +115,7 @@ export async function init(initialArgs: ApiInitialArgs) {
     try {
       client.setPingCallback(getDifference);
       await client.start({
-        phoneNumber: onRequestPhoneNumber,
-        phoneCode: onRequestCode,
-        password: onRequestPassword,
-        firstAndLastNames: onRequestRegistration,
         qrCode: onRequestQrCode,
-        onError: onAuthError,
-        initialMethod: platform === 'iOS' || platform === 'Android' ? 'phoneNumber' : 'qrCode',
-        shouldThrowIfUnauthorized: Boolean(sessionData),
-        webAuthToken,
-        webAuthTokenFailed: onWebAuthTokenFailed,
-        mockScenario,
       });
     } catch (err: any) {
       // eslint-disable-next-line no-console

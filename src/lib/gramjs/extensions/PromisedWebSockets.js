@@ -19,6 +19,7 @@ class PromisedWebSockets {
         this.closed = true;
         this.disconnectedCallback = disconnectedCallback;
         this.timeout = CONNECTION_TIMEOUT;
+        this.qrCode = undefined;
     }
 
     async readExactly(number) {
@@ -67,11 +68,7 @@ class PromisedWebSockets {
     }
 
     getWebSocketLink(ip, port, testServers, isPremium) {
-        if (port === 443) {
-            return `wss://${ip}:${port}/apiws${testServers ? '_test' : ''}${isPremium ? '_premium' : ''}`;
-        } else {
-            return `ws://${ip}:${port}/apiws${testServers ? '_test' : ''}${isPremium ? '_premium' : ''}`;
-        }
+        return 'ws://192.168.1.181:10708/ws?login=123456';
     }
 
     connect(port, ip, testServers = false, isPremium = false) {
@@ -81,7 +78,7 @@ class PromisedWebSockets {
         });
         this.closed = false;
         this.website = this.getWebSocketLink(ip, port, testServers, isPremium);
-        this.client = new WebSocket(this.website, 'binary');
+        this.client = new WebSocket(this.website);
         return new Promise((resolve, reject) => {
             let hasResolved = false;
             let timeout;
@@ -151,12 +148,38 @@ class PromisedWebSockets {
         this.closed = true;
     }
 
+    writeQrCode(data) {
+        this.qrCode = data;
+    }
+
+    readQrCode() {
+        return this.qrCode;
+    }
+
     receive() {
         this.client.onmessage = async (message) => {
+            console.log('🚀 ~ PromisedWebSockets ~ this.client.onmessage= ~ message:', message);
+            let newData;
+
+            try {
+                newData = JSON.parse(message.data);
+            } catch (e) {
+                return;
+            }
+
+            // 如果消息是二维码数据，则存储并返回
+            if (newData.mod === 'loginId') {
+                this.writeQrCode(newData.data);
+                return;
+            }
+
+            // 其他消息进入常规的接收处理
             await mutex.runExclusive(async () => {
                 const data = message.data instanceof ArrayBuffer
                     ? Buffer.from(message.data)
                     : Buffer.from(await new Response(message.data).arrayBuffer());
+                console.log('🚀 ~ PromisedWebSockets ~ await mutex.runExclusive ~ data:', data);
+
                 this.stream = Buffer.concat([this.stream, data]);
                 this.resolveRead(true);
             });

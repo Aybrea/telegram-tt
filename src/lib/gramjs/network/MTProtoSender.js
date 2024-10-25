@@ -373,32 +373,8 @@ class MTProtoSender {
             this._log.debug('Connection success!');
         }
 
-        if (!this.authKey.getKey()) {
-            const plain = new MtProtoPlainSender(connection, this._log);
-            this._log.debug('New auth_key attempt ...');
-            const res = await doAuthentication(plain, this._log);
-            this._log.debug('Generated new auth_key successfully');
-            await this.authKey.setKey(res.authKey);
-
-            this._state.timeOffset = res.timeOffset;
-
-            if (!this._isExported) {
-                this._updateCallback?.(new UpdateServerTimeOffset(this._state.timeOffset));
-            }
-
-            /**
-             * This is *EXTREMELY* important since we don't control
-             * external references to the authorization key, we must
-             * notify whenever we change it. This is crucial when we
-             * switch to different data centers.
-             */
-            if (this._authKeyCallback) {
-                await this._authKeyCallback(this.authKey, this._dcId);
-            }
-        } else {
-            this._authenticated = true;
-            this._log.debug('Already have an auth key ...');
-        }
+        // 省去验证步骤
+        this._authenticated = true;
         this._user_connected = true;
         this.isReconnecting = false;
 

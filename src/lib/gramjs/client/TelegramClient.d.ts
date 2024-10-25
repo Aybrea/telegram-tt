@@ -28,6 +28,8 @@ declare class TelegramClient {
 
     async getCurrentPassword(Params: TwoFaPasswordParams): Promise<PasswordResult>;
 
+    async getMe(): Promise<any>;
+
     setPingCallback(callback: () => Promise<void>);
 
     setForceHttpTransport: (forceHttpTransport: boolean) => void;

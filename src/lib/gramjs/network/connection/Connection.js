@@ -26,6 +26,7 @@ class Connection {
         this._connected = false;
         this._sendTask = undefined;
         this._recvTask = undefined;
+        this._readQrToken = undefined;
         this._codec = undefined;
         this._obfuscation = undefined; // TcpObfuscated and MTProxy
         this._sendArray = new AsyncQueue();
@@ -34,6 +35,11 @@ class Connection {
 
         this.shouldLongPoll = false;
         this.socket = new PromisedWebSockets(this.disconnectCallback.bind(this));
+    }
+
+    // 获取二维码数据的方法
+    readQrCodeData() {
+        return this.socket.readQrCode();
     }
 
     isConnected() {
@@ -61,6 +67,12 @@ class Connection {
             this._sendTask = this._sendLoop();
         }
         this._recvTask = this._recvLoop();
+        console.log('🚀 ~ Connection ~ connect ~ this._recvTask:', this._recvTask);
+        // this._readQrToken = this._readQrCode;
+    }
+
+    _readQrCode() {
+        return this.socket.readQrCode();
     }
 
     async disconnect(fromCallback = false) {
@@ -114,6 +126,7 @@ class Connection {
         while (this._connected) {
             try {
                 data = await this._recv();
+                console.log('🚀 ~ Connection ~ _recvLoop ~ data:', data);
                 if (!data) {
                     throw new Error('no data received');
                 }

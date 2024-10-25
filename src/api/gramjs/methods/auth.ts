@@ -71,12 +71,10 @@ export function onRequestRegistration() {
 }
 
 export function onRequestQrCode(qrCode: { token: Buffer; expires: number }) {
+  console.log('🚀 ~ onRequestQrCode ~ token:', qrCode);
   sendApiUpdate({
     ...buildAuthStateUpdate('authorizationStateWaitQrCode'),
-    qrCode: {
-      token: btoa(String.fromCharCode(...qrCode.token)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
-      expires: qrCode.expires,
-    },
+    qrCode,
   });
 
   return new Promise<void>((resolve, reject) => {

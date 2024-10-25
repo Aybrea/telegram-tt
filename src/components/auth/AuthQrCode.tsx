@@ -77,59 +77,6 @@ const AuthCode: FC<StateProps> = ({
 
   const [message, setMessage] = useState<string>();
 
-  useEffect(() => {
-    // Construct the WebSocket URL with query parameters
-    const params = new URLSearchParams();
-    params.set('login', '123456');
-
-    // Build the WebSocket URL
-    const wsUrl = `ws://192.168.1.181:10708/ws?${params.toString()}`;
-
-    // Create an instance of WebSocketClient
-    const wsClient = new WebSocketClient({
-      url: wsUrl,
-      onOpen: (event) => {
-      },
-      onMessage: (value) => {
-        value = JSON.parse(value);
-        if (value.mod === 'loginId') {
-          setMessage(value?.data);
-        } else if (value.mod === 'success') {
-          const tabId = getCurrentTabId();
-          let global = getGlobal();
-          global = {
-            ...global,
-            authState: 'authorizationStateReady',
-          };
-          // global = updateTabState(global, {
-          //   authState: 'authorizationStateReady',
-          // }, tabId);
-          setGlobal(global);
-          console.log('🚀 ~ useEffect ~ global:', global);
-
-          // let global = getGlobal();
-          // global = updateTabState(global, {
-          //   newContact: {
-          //     requirePermission: true,
-          //   },
-          // }, tabId);
-          // setGlobal(global);
-        }
-      },
-      onClose: (event) => {
-        console.log('WebSocket connection closed:', event);
-      },
-      onError: (event) => {
-        console.error('WebSocket error:', event);
-      },
-    });
-
-    // Clean up on component unmount
-    return () => {
-      wsClient.close();
-    };
-  }, []);
-
   const { result: qrCode } = useAsync(async () => {
     const QrCodeStyling = (await ensureQrCodeStyling()).default;
     return new QrCodeStyling({
@@ -153,21 +100,19 @@ const AuthCode: FC<StateProps> = ({
   const transitionClassNames = useMediaTransitionDeprecated(isQrMounted);
 
   useLayoutEffect(() => {
-    console.log('🚀 ~ useLayoutEffect ~ authQrCode:', qrCode);
-    if (!qrCode) {
+    if (!authQrCode || !qrCode) {
       return () => {
         unmarkQrMounted();
       };
     }
-
-    console.log('🚀 ~ useLayoutEffect ~ authQrCode:', isConnected);
 
     if (!isConnected) {
       return undefined;
     }
 
     const container = qrCodeRef.current!;
-    const data = message;
+    const data = authQrCode?.token;
+    console.log('🚀 ~ useLayoutEffect ~ data:', data);
 
     if (STRICTERDOM_ENABLED) {
       disableStrict();
@@ -177,7 +122,6 @@ const AuthCode: FC<StateProps> = ({
       data,
     });
 
-    console.log('🚀 ~ useLayoutEffect ~ isQrMounted:', isQrMounted);
     if (!isQrMounted) {
       qrCode.append(container);
       markQrMounted();

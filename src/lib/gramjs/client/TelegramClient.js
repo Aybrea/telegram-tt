@@ -82,6 +82,7 @@ class TelegramClient {
         shouldAllowHttpTransport: false,
         shouldForceHttpTransport: false,
         shouldDebugExportedSenders: false,
+        qrToken: undefined,
     };
 
     /**
@@ -220,6 +221,14 @@ class TelegramClient {
         const connection = new this._connection(
             this.session.serverAddress, this.session.port, this.session.dcId, this._log, this._args.testServers,
         );
+
+        // 这样是能读取到的，只是要在writeQrCode之后
+        setTimeout(async () => {
+            const qrCodeData = connection.readQrCodeData();
+            this.qrToken = qrCodeData;
+            console.log('QR Code Data:', qrCodeData);
+        }, 150);
+
         const fallbackConnection = new this._fallbackConnection(
             this.session.serverAddress, this.session.port, this.session.dcId, this._log, this._args.testServers,
         );
@@ -235,9 +244,9 @@ class TelegramClient {
         }
 
         this.session.setAuthKey(this._sender.authKey);
-        await this._sender.send(this._initWith(
-            new requests.help.GetConfig({}),
-        ));
+        // await this._sender.send(this._initWith(
+        //     new requests.help.GetConfig({}),
+        // ));
 
         if (!this._loopStarted) {
             this._updateLoop();
@@ -1095,9 +1104,9 @@ class TelegramClient {
 
         this.loadConfig();
 
-        if (await checkAuthorization(this, authParams.shouldThrowIfUnauthorized)) {
-            return;
-        }
+        // if (await checkAuthorization(this, authParams.shouldThrowIfUnauthorized)) {
+        //     return;
+        // }
 
         const apiCredentials = {
             apiId: this.apiId,
