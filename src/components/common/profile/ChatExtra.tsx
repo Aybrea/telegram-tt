@@ -47,6 +47,7 @@ import useOldLang from '../../../hooks/useOldLang';
 import useDevicePixelRatio from '../../../hooks/window/useDevicePixelRatio';
 
 import Chat from '../../left/main/Chat';
+import ShareFriendsModal from '../../modals/friends/ShareFriendsModal';
 import AnnotationDialog from '../../ui/AnnotationDialog';
 import Button from '../../ui/Button';
 import ConfirmDialog from '../../ui/ConfirmDialog';
@@ -124,6 +125,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     unblockUser,
   } = getActions();
 
+  const [isOpenShareFriend, openShareFriend, closeShareFriend] = useFlag();
   const [isDeleteDialogOpen, openDeleteDialog, closeDeleteDialog] = useFlag();
   const [isAnnotationDialogOpen, openAnnotationDialog, closeAnnotationDialog] = useFlag();
   const {
@@ -471,7 +473,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         narrow
         ripple
         // eslint-disable-next-line react/jsx-no-bind
-        onClick={() => copy(link, oldLang('SetUrlPlaceholder'))}
+        onClick={openShareFriend}
       >
         分享他的名片
       </ListItem>
@@ -547,6 +549,10 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
         isOpen={isAnnotationDialogOpen}
         onClose={closeAnnotationDialog}
         confirmHandler={handleAnnotate}
+      />
+      <ShareFriendsModal
+        isOpen={isOpenShareFriend}
+        onClose={closeShareFriend}
       />
     </div>
   );

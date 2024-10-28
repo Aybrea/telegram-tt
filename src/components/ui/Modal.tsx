@@ -43,6 +43,7 @@ export type OwnProps = {
   onClose: () => void;
   onCloseAnimationEnd?: () => void;
   onEnter?: () => void;
+  footer: any;
 };
 
 const Modal: FC<OwnProps> = ({
@@ -65,6 +66,7 @@ const Modal: FC<OwnProps> = ({
   onClose,
   onCloseAnimationEnd,
   onEnter,
+  footer,
 }) => {
   const {
     ref: modalRef,
@@ -174,6 +176,11 @@ const Modal: FC<OwnProps> = ({
             <div className={buildClassName('modal-content custom-scroll', contentClassName)} style={style}>
               {children}
             </div>
+            {footer && ( // 仅在传入 footer 时显示
+              <div className="modal-footer">
+                {footer}
+              </div>
+            )}
           </div>
         </div>
       </div>
