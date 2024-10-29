@@ -1289,3 +1289,4 @@
 "PrizeCredits" = "Your prize is {count} Stars."
 "DeleteChatHistory" = "清除聊天记录"
 "DoNotDisturb" = "消息免打扰"
+"Notification.CreatedChatWithTitle" = "群聊已创建"

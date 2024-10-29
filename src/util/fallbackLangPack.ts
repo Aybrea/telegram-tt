@@ -559,5 +559,5 @@ export default {
   lng_month3: '三月',
   lng_month2: '二月',
   lng_month1: '一月',
-
+  'Notification.CreatedChatWithTitle': '群聊已创建',
 } as ApiOldLangPack;
