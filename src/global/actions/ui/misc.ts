@@ -52,6 +52,17 @@ addActionHandler('toggleChatInfo', (global, actions, payload): ActionReturnType 
   return global;
 });
 
+addActionHandler('toggleScheduledCleaning', (global, actions, payload): ActionReturnType => {
+  const { force, tabId = getCurrentTabId() } = payload || {};
+  const isScheduledCleaningShown = force !== undefined
+    ? force : !selectTabState(global, tabId).isScheduledCleaningShown;
+
+  global = updateTabState(global, { isScheduledCleaningShown }, tabId);
+  global = { ...global, lastIsScheduledCleaningShown: isScheduledCleaningShown };
+
+  return global;
+});
+
 addActionHandler('setLeftColumnWidth', (global, actions, payload): ActionReturnType => {
   const { leftColumnWidth } = payload;
 

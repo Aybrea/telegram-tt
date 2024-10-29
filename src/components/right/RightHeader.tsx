@@ -45,6 +45,7 @@ type OwnProps = {
   isColumnOpen?: boolean;
   isProfile?: boolean;
   isManagement?: boolean;
+  isScheduledCleaning?: boolean;
   isStatistics?: boolean;
   isBoostStatistics?: boolean;
   isMessageStatistics?: boolean;
@@ -122,6 +123,7 @@ enum HeaderContent {
   CreateTopic,
   EditTopic,
   SavedDialogs,
+  ScheduledCleaning,
 }
 
 const RightHeader: FC<OwnProps & StateProps> = ({
@@ -130,6 +132,7 @@ const RightHeader: FC<OwnProps & StateProps> = ({
   isColumnOpen,
   isProfile,
   isManagement,
+  isScheduledCleaning,
   isStatistics,
   isMessageStatistics,
   isStoryStatistics,
@@ -303,7 +306,10 @@ const RightHeader: FC<OwnProps & StateProps> = ({
     HeaderContent.EditTopic
   ) : isMonetizationStatistics ? (
     HeaderContent.MonetizationStatistics
-  ) : undefined; // When column is closed
+  )
+    : isScheduledCleaning
+      ? HeaderContent.ScheduledCleaning
+      : undefined; // When column is closed
 
   const renderingContentKey = useCurrentOrPrev(contentKey, true) ?? -1;
 
@@ -333,6 +339,8 @@ const RightHeader: FC<OwnProps & StateProps> = ({
     }
 
     switch (renderingContentKey) {
+      case HeaderContent.ScheduledCleaning:
+        return <h3 className="title">定时清理</h3>;
       case HeaderContent.PollResults:
         return <h3 className="title">{lang('PollResults')}</h3>;
       case HeaderContent.AddingMembers:

@@ -403,6 +403,7 @@ const Composer: FC<OwnProps & StateProps> = ({
     setReactionEffect,
     hideEffectInComposer,
     unblockUser,
+    openScheduledCleaning,
   } = getActions();
 
   const lang = useOldLang();
@@ -1399,6 +1400,11 @@ const Composer: FC<OwnProps & StateProps> = ({
     });
   });
 
+  const handleScheduledCleaningClick = useLastCallback((event: React.MouseEvent | React.TouchEvent) => {
+    if ((event.target as Element).closest('.title > .custom-emoji')) return;
+    openScheduledCleaning({ chatId, threadId });
+  });
+
   useEffect(() => {
     if (isRightColumnShown && isMobile) {
       closeSymbolMenu();
@@ -1966,6 +1972,7 @@ const Composer: FC<OwnProps & StateProps> = ({
                     onContextMenu={
                       mainButtonState === MainButtonState.Send && canShowCustomSendMenu ? handleContextMenu : undefined
                     }
+                    onClick={handleScheduledCleaningClick}
                   >
                     <i className="icon icon-schedule" />
                   </Button>

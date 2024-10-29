@@ -314,6 +314,7 @@ function reduceGlobal<T extends GlobalState>(global: T) {
       'availableEffectById',
     ]),
     lastIsChatInfoShown: !getIsMobile() ? global.lastIsChatInfoShown : undefined,
+    lastIsScheduledCleaningShown: !getIsMobile() ? global.lastIsScheduledCleaningShown : undefined,
     customEmojis: reduceCustomEmojis(global),
     users: reduceUsers(global),
     chats: reduceChats(global),

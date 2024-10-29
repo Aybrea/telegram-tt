@@ -128,6 +128,19 @@ addActionHandler('openThreadWithInfo', (global, actions, payload): ActionReturnT
   actions.openThread({ ...payload, tabId });
 });
 
+addActionHandler('openScheduledCleaning', (global, actions, payload): ActionReturnType => {
+  const { tabId = getCurrentTabId() } = payload;
+
+  global = updateTabState(global, {
+    ...selectTabState(global, tabId),
+    isScheduledCleaningShown: true,
+  }, tabId);
+  global = { ...global, lastIsChatInfoShown: true };
+  setGlobal(global);
+
+  actions.openThread({ ...payload, tabId });
+});
+
 addActionHandler('openChatWithDraft', (global, actions, payload): ActionReturnType => {
   const {
     chatId, text, threadId = MAIN_THREAD_ID, files, filter, tabId = getCurrentTabId(),

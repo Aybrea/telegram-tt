@@ -283,6 +283,7 @@ export type TabState = {
   inviteHash?: string;
   canInstall?: boolean;
   isChatInfoShown: boolean;
+  isScheduledCleaningShown?: boolean;
   isStatisticsShown?: boolean;
   isLeftColumnShown: boolean;
   newChatMembersProgress?: NewChatMembersProgress;
@@ -867,6 +868,7 @@ export type GlobalState = {
   isFetchingDifference?: boolean;
   leftColumnWidth?: number;
   lastIsChatInfoShown?: boolean;
+  lastIsScheduledCleaningShown?: boolean;
   initialUnreadNotifications?: number;
   shouldShowContextMenuHint?: boolean;
 
@@ -1461,6 +1463,7 @@ export interface ActionPayloads {
   } & WithTabId;
 
   toggleChatInfo: ({ force?: boolean } & WithTabId) | undefined;
+  toggleScheduledCleaning: ({ force?: boolean } & WithTabId) | undefined;
   setIsUiReady: {
     uiReadyState: 0 | 1 | 2;
   } & WithTabId;
@@ -1494,6 +1497,7 @@ export interface ActionPayloads {
     forceScrollProfileTab?: boolean;
   } & WithTabId;
   openThreadWithInfo: ActionPayloads['openThread'] & WithTabId;
+  openScheduledCleaning: ActionPayloads['openThread'] & WithTabId;
   openLinkedChat: { id: string } & WithTabId;
   loadMoreMembers: WithTabId | undefined;
   setActiveChatFolder: {

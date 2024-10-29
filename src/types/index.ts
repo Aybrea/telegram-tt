@@ -314,6 +314,7 @@ export enum RightColumnContent {
   CreateTopic,
   EditTopic,
   MonetizationStatistics,
+  ScheduledCleaning,
 }
 
 export type MediaViewerMedia = ApiPhoto | ApiVideo | ApiDocument;

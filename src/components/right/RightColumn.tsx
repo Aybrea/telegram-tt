@@ -33,6 +33,7 @@ import Management from './management/Management.async';
 import PollResults from './PollResults.async';
 import Profile from './Profile';
 import RightHeader from './RightHeader';
+import ScheduledCleaning from './ScheduledCleaning';
 import BoostStatistics from './statistics/BoostStatistics';
 import MessageStatistics from './statistics/MessageStatistics.async';
 import MonetizationStatistics from './statistics/MonetizationStatistics';
@@ -86,6 +87,7 @@ const RightColumn: FC<OwnProps & StateProps> = ({
 }) => {
   const {
     toggleChatInfo,
+    toggleScheduledCleaning,
     toggleManagement,
     setStickerSearchQuery,
     setGifSearchQuery,
@@ -116,6 +118,7 @@ const RightColumn: FC<OwnProps & StateProps> = ({
   const isScrolledDown = profileState !== ProfileState.Profile;
 
   const isOpen = contentKey !== undefined;
+  const isScheduledCleaning = contentKey === RightColumnContent.ScheduledCleaning;
   const isProfile = contentKey === RightColumnContent.ChatInfo;
   const isManagement = contentKey === RightColumnContent.Management;
   const isStatistics = contentKey === RightColumnContent.Statistics;
@@ -135,6 +138,7 @@ const RightColumn: FC<OwnProps & StateProps> = ({
 
   const renderingContentKey = useCurrentOrPrev(contentKey, true, !isChatSelected) ?? -1;
 
+  // 右侧顶部关闭按钮
   const close = useLastCallback((shouldScrollUp = true) => {
     switch (contentKey) {
       case RightColumnContent.AddingMembers:
@@ -146,6 +150,9 @@ const RightColumn: FC<OwnProps & StateProps> = ({
           break;
         }
         toggleChatInfo({ force: false }, { forceSyncOnIOs: true });
+        break;
+      case RightColumnContent.ScheduledCleaning:
+        toggleScheduledCleaning({ force: false }, { forceSyncOnIOs: true });
         break;
       case RightColumnContent.Management: {
         switch (managementScreen) {
@@ -351,9 +358,19 @@ const RightColumn: FC<OwnProps & StateProps> = ({
         return <CreateTopic onClose={close} isActive={isOpen && isActive} />;
       case RightColumnContent.EditTopic:
         return <EditTopic onClose={close} isActive={isOpen && isActive} />;
+      case RightColumnContent.ScheduledCleaning:
+        return (
+          <ScheduledCleaning
+            key={`schedule_${chatId!}_${threadId}`}
+            chatId={chatId!}
+            threadId={threadId}
+            isMobile={isMobile}
+            onProfileStateChange={setProfileState}
+          />
+        );
     }
 
-    return undefined; // Unreachable
+    return void 0; // Unreachable
   }
 
   return (
@@ -370,6 +387,7 @@ const RightColumn: FC<OwnProps & StateProps> = ({
           threadId={threadId}
           isColumnOpen={isOpen}
           isProfile={isProfile}
+          isScheduledCleaning={isScheduledCleaning}
           isManagement={isManagement}
           isStatistics={isStatistics}
           isBoostStatistics={isBoostStatistics}
