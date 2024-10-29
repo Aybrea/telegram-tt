@@ -30,18 +30,6 @@
   left: 66%; /* 定位到第二个和第三个元素之间 */
 }
 
-/* Add a vertical divider between items */
-.root > *:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 1px;
-  top: 50%; /* Center the divider vertically */
-  transform: translateY(-50%); /* Adjust to perfectly center */
-  height: 70%; /* Adjust the height of the divider */
-  width: 1px;
-  background-color: #f0f0f0; /* Divider color */
-}
-
 .divider {
   height: 0.625rem;
   background: #f5f6f8;
