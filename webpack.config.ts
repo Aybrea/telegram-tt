@@ -92,9 +92,6 @@ export default function createConfig(
       devMiddleware: {
         stats: 'minimal',
       },
-      headers: {
-        'Content-Security-Policy': CSP,
-      },
     },
 
     output: {
