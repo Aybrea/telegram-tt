@@ -90,7 +90,7 @@ class StorageSession extends MemorySession {
     }
 
     getAuthKey(dcId = this._dcId) {
-        return this._authKeys[dcId];
+        return undefined;
     }
 
     setAuthKey(authKey, dcId = this._dcId) {

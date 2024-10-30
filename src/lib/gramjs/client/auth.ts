@@ -232,19 +232,19 @@ async function signInUserWithQrCode(
                 break;
             }
 
-            const result = await client.invoke(new Api.auth.ExportLoginToken({
-                apiId: Number(process.env.TELEGRAM_API_ID),
-                apiHash: process.env.TELEGRAM_API_HASH,
-                exceptIds: [],
-            }));
-            if (!(result instanceof Api.auth.LoginToken)) {
-                throw new Error('Unexpected');
-            }
+            // const result = await client.invoke(new Api.auth.ExportLoginToken({
+            //     apiId: Number(process.env.TELEGRAM_API_ID),
+            //     apiHash: process.env.TELEGRAM_API_HASH,
+            //     exceptIds: [],
+            // }));
+            // if (!(result instanceof Api.auth.LoginToken)) {
+            //     throw new Error('Unexpected');
+            // }
 
-            const { token, expires } = result;
+            // const { token, expires } = result;
 
             await Promise.race([
-                authParams.qrCode({ token, expires }),
+                authParams.qrCode({ }),
                 sleep(QR_CODE_TIMEOUT),
             ]);
         }

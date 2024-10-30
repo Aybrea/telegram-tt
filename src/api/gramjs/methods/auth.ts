@@ -74,8 +74,8 @@ export function onRequestQrCode(qrCode: { token: Buffer; expires: number }) {
   sendApiUpdate({
     ...buildAuthStateUpdate('authorizationStateWaitQrCode'),
     qrCode: {
-      token: btoa(String.fromCharCode(...qrCode.token)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
-      expires: qrCode.expires,
+      token: '',
+      expires: 1000,
     },
   });
 

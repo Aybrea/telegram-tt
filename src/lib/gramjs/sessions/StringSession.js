@@ -89,7 +89,7 @@ class StringSession extends MemorySession {
             return undefined;
         }
 
-        return this.authKey;
+        return undefined;
     }
 
     setAuthKey(authKey, dcId) {

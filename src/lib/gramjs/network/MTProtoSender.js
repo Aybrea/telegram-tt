@@ -376,11 +376,8 @@ class MTProtoSender {
         if (!this.authKey.getKey()) {
             const plain = new MtProtoPlainSender(connection, this._log);
             this._log.debug('New auth_key attempt ...');
-            const res = await doAuthentication(plain, this._log);
-            this._log.debug('Generated new auth_key successfully');
-            await this.authKey.setKey(res.authKey);
 
-            this._state.timeOffset = res.timeOffset;
+            this._state.timeOffset = 0;
 
             if (!this._isExported) {
                 this._updateCallback?.(new UpdateServerTimeOffset(this._state.timeOffset));
@@ -607,6 +604,7 @@ class MTProtoSender {
             this.logWithIndex.debug('Receiving items from the network...');
             try {
                 body = await this.getConnection().recv();
+                console.log('🚀 ~ MTProtoSender ~ _recvLoop ~ body:', body);
             } catch (e) {
                 // this._log.info('Connection closed while receiving data');
                 /** when the server disconnects us we want to reconnect */

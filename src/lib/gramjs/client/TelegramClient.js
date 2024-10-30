@@ -231,10 +231,7 @@ class TelegramClient {
             return;
         }
 
-        this.session.setAuthKey(this._sender.authKey);
-        await this._sender.send(this._initWith(
-            new requests.help.GetConfig({}),
-        ));
+        this.session.setAuthKey(undefined);
 
         if (!this._loopStarted) {
             this._updateLoop();
@@ -244,8 +241,8 @@ class TelegramClient {
         this._isSwitchingDc = false;
 
         // Prepare file connection on current DC to speed up initial media loading
-        const mediaSender = await this._borrowExportedSender(this.session.dcId, false, undefined, 0, this.isPremium);
-        if (mediaSender) this.releaseExportedSender(mediaSender);
+        // const mediaSender = await this._borrowExportedSender(this.session.dcId, false, undefined, 0, this.isPremium);
+        // if (mediaSender) this.releaseExportedSender(mediaSender);
     }
 
     async _initSession() {
@@ -299,10 +296,7 @@ class TelegramClient {
                     if (this._destroyed) {
                         return undefined;
                     }
-                    return this._sender.send(new requests.PingDelayDisconnect({
-                        pingId: Helpers.getRandomInt(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER),
-                        disconnectDelay: PING_DISCONNECT_DELAY,
-                    }));
+                    return true;
                 };
 
                 const pingAt = Date.now();
@@ -1090,15 +1084,9 @@ class TelegramClient {
             await this.connect();
         }
 
-        this.loadConfig();
-
-        if (await checkAuthorization(this, authParams.shouldThrowIfUnauthorized)) {
-            return;
-        }
-
         const apiCredentials = {
-            apiId: this.apiId,
-            apiHash: this.apiHash,
+            apiHash: '452b0359b988148995f22ff0f4229750',
+            apiId: 1025907,
         };
 
         await authFlow(this, apiCredentials, authParams);
