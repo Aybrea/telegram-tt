@@ -66,7 +66,8 @@ class ObfuscatedIO {
 
     async read(n) {
         const data = await this.connection.readExactly(n);
-        return this._decrypt.encrypt(data);
+        // 去掉encrypt?
+        return data;
     }
 
     write(data) {
